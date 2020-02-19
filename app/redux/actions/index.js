@@ -1,11 +1,12 @@
-const productActionTypes = {
-  FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
-  FETCH_PRODUCTS_SUCCEED: 'FETCH_PRODUCTS_SUCCEED',
-  FETCH_PRODUCTS_FAIL: 'FETCH_PRODUCTS_FAIL'
+import cartActionTypes from './cartAction'
+import productActionTypes from './productAction'
+
+const actionTypes = {
+  ...cartActionTypes,
+  ...productActionTypes
 }
 
-export const fetchProductsRequest = () => ({
-  type: productActionTypes.FETCH_PRODUCTS_REQUEST
-})
+export * from './cartAction'
+export * from './productAction'
 
-export default productActionTypes
+export default actionTypes
