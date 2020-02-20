@@ -1,70 +1,71 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import mock from '../mock'
-
-const color = {
-  border: '#aaa',
-  buttonBgColor: '#444',
-  buttonColor: '#fff'
-}
+import { list } from '../styles/components/list'
+import { button } from '../styles/components/button'
+import { color } from '../styles/utils/variables'
 
 const styles = StyleSheet.create({
-  productsList: {},
-  productsRow: {
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: color.border,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  checkout: {
+    alignItems: 'center'
+  },
+  checkoutButton: {
+    backgroundColor: color.transparent,
+    borderColor: color.green500,
+    borderRadius: 3,
+    borderWidth: 2,
+    marginVertical: 10,
     padding: 10,
-    paddingVertical: 15
+    width: '70%'
   },
-  productsRowButton: {
-    alignItems: 'center',
-    backgroundColor: color.buttonBgColor,
-    borderRadius: 1000,
+  checkoutButtonText: {
+    color: color.green500,
+    textAlign: 'center'
+  },
+  promoCode: {
+    flex: 1
+  },
+  promoCodeButton: {
+    backgroundColor: color.green500,
+    borderRadius: 5,
+    padding: 5
+  },
+  promoCodeInput: {
+    borderColor: color.gray500,
+    borderWidth: 1,
+    flex: 1,
     height: 30,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    width: 30
+    marginHorizontal: 3,
+    paddingVertical: 3
   },
-  productsRowButtonTxt: {
-    color: color.buttonColor
-  },
-  productsRowInfo: {
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  productsRowName: {}
+  promoCodeText: {
+    color: color.white
+  }
 })
 
 class ProductDetail extends Component {
   constructor(props) {
     super(props)
-    this.state = { cnt: 0 }
-    this.props.navigation.setParams({ cnt: 0 })
+    this.state = { cnt: 0, promoCode: '' }
   }
 
-  componentDidMount() {
-    this.props.navigation.setParams({ cnt: 0 })
-  }
-
-  addToCart = () => {
-    const newCnt = this.state.cnt + 1
-    this.setState({ cnt: newCnt })
-    this.props.navigation.setParams({ cnt: newCnt })
-  }
-
-  removeToCart = () => {
-    const newCnt = this.state.cnt - 1
-    if (newCnt < 0) return
-    this.setState({ cnt: newCnt })
-    this.props.navigation.setParams({ cnt: newCnt })
-  }
-
-  clearToCart = () => {
-    const newCnt = 0
+  updateCart = () => (mode) => {
+    let newCnt = 0
+    switch (mode) {
+      case 'inc':
+        newCnt = this.state.cnt + 1
+        break
+      case 'dec':
+        newCnt = this.state.cnt - 1
+        if (newCnt < 0) return
+        break
+      case 'clear':
+        newCnt = 0
+        break
+      default:
+        return
+    }
     this.setState({ cnt: newCnt })
     this.props.navigation.setParams({ cnt: newCnt })
   }
@@ -72,70 +73,74 @@ class ProductDetail extends Component {
   render() {
     const sum = mock
       .filter((el) => el.cnt)
-      .reduce((acc, cur) => {
-        console.log('start')
-        console.log('acc', acc)
-        console.log('cur.cnt', cur.cnt)
-        console.log('end')
-
-        return acc + cur.cnt
-      })
-    console.log(sum)
+      .reduce((acc, cur) => acc + cur.cnt * cur.price, 0)
+      .toFixed(2)
     return (
-      <View style={styles.productsList}>
+      <View>
         {mock
           .filter((el) => el.cnt && el.cnt !== 0)
           .map((el) => (
-            <View key={el.sku} style={styles.productsRow}>
-              <View style={styles.productsRowName}>
+            <View key={el.sku} style={list.row}>
+              <View style={list.rowTitle}>
                 <Text>{el.name}</Text>
               </View>
-              <View style={styles.productsRowInfo}>
-                <TouchableOpacity style={styles.productsRowButton} onPress={this.removeToCart}>
-                  <Text style={styles.productsRowButtonTxt}>-</Text>
+              <View style={list.rowContent}>
+                <TouchableOpacity style={button.action} onPress={this.updateCart('dec')}>
+                  <Text style={button.actionText}>-</Text>
                 </TouchableOpacity>
                 <Text>{el.cnt}</Text>
-                <TouchableOpacity style={styles.productsRowButton} onPress={this.addToCart}>
-                  <Text style={styles.productsRowButtonTxt}>+</Text>
+                <TouchableOpacity style={button.action} onPress={this.updateCart('inc')}>
+                  <Text style={button.actionText}>+</Text>
                 </TouchableOpacity>
                 <Text>${el.price}</Text>
-                <TouchableOpacity style={styles.productsRowButton} onPress={this.clearToCart}>
-                  <Text style={styles.productsRowButtonTxt}>x</Text>
+                <TouchableOpacity style={button.action} onPress={this.updateCart('clear')}>
+                  <Text style={button.actionText}>x</Text>
                 </TouchableOpacity>
               </View>
             </View>
           ))}
-        <View style={styles.productsRow}>
-          <View style={styles.productsRowName}>
+        <View style={list.row}>
+          <View style={list.rowTitle}>
             <Text>Promo Code</Text>
           </View>
-          <View style={styles.productsRowInfo}>
-            <Text>Apply</Text>
+          <View style={[list.rowContent, styles.promoCode]}>
+            <TextInput
+              style={styles.promoCodeInput}
+              onChangeText={(text) => this.setState({ promoCode: text })}
+            />
+            <TouchableOpacity style={styles.promoCodeButton}>
+              <Text style={styles.promoCodeText}>Apply</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.productsRow}>
-          <View style={styles.productsRowName}>
+        <View style={list.row}>
+          <View style={list.rowTitle}>
             <Text>Sub Total:</Text>
           </View>
-          <View style={styles.productsRowInfo}>
-            <Text>{sum}</Text>
+          <View style={list.rowContent}>
+            <Text>${sum}</Text>
           </View>
         </View>
-        <View style={styles.productsRow}>
-          <View style={styles.productsRowName}>
+        <View style={list.row}>
+          <View style={list.rowTitle}>
             <Text>Promo Amount</Text>
           </View>
-          <View style={styles.productsRowInfo}>
-            <Text>Apply</Text>
+          <View style={list.rowContent}>
+            <Text>0</Text>
           </View>
         </View>
-        <View style={styles.productsRow}>
-          <View style={styles.productsRowName}>
+        <View style={list.row}>
+          <View style={list.rowTitle}>
             <Text>Basket Total:</Text>
           </View>
-          <View style={styles.productsRowInfo}>
-            <Text>Apply</Text>
+          <View style={list.rowContent}>
+            <Text>${sum}</Text>
           </View>
+        </View>
+        <View style={styles.checkout}>
+          <TouchableOpacity style={styles.checkoutButton}>
+            <Text style={styles.checkoutButtonText}>Checkout</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )

@@ -1,54 +1,15 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 // import { connect } from 'react-redux'
 import mock from '../mock'
-
-const color = {
-  border: '#aaa',
-  buttonBgColor: '#444',
-  buttonColor: '#fff'
-}
-
-const styles = StyleSheet.create({
-  productsList: {},
-  productsRow: {
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: color.border,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-    paddingVertical: 15
-  },
-  productsRowButton: {
-    alignItems: 'center',
-    backgroundColor: color.buttonBgColor,
-    borderRadius: 1000,
-    height: 30,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    width: 30
-  },
-  productsRowButtonTxt: {
-    color: color.buttonColor
-  },
-  productsRowInfo: {
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  productsRowName: {}
-})
+import { list } from '../styles/components/list'
+import { button } from '../styles/components/button'
 
 class ProductsList extends Component {
   constructor(props) {
     super(props)
     this.state = { cnt: 0 }
-    this.props.navigation.setParams({ cnt: 0 })
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ cnt: 0 })
   }
 
   addToCart = () => {
@@ -59,16 +20,16 @@ class ProductsList extends Component {
 
   render() {
     return (
-      <View style={styles.productsList}>
+      <View>
         {mock.map((el) => (
-          <View key={el.sku} style={styles.productsRow}>
-            <View style={styles.productsRowName}>
+          <View key={el.sku} style={list.row}>
+            <View>
               <Text>{el.name}</Text>
             </View>
-            <View style={styles.productsRowInfo}>
+            <View style={list.rowContent}>
               <Text>${el.price}</Text>
-              <TouchableOpacity style={styles.productsRowButton} onPress={this.addToCart}>
-                <Text style={styles.productsRowButtonTxt}>+</Text>
+              <TouchableOpacity style={button.action} onPress={this.addToCart}>
+                <Text style={button.actionText}>+</Text>
               </TouchableOpacity>
             </View>
           </View>
