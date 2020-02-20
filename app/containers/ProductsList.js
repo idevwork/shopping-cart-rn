@@ -11,9 +11,6 @@ const color = {
 }
 
 const styles = StyleSheet.create({
-  productsCnt: {
-    paddingRight: 10
-  },
   productsList: {},
   productsRow: {
     alignItems: 'center',

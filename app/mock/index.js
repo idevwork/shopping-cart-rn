@@ -3,19 +3,22 @@ const mock = [
     sku: 1,
     name: 'Product One',
     description: 'Product One description',
-    price: 1.11
+    price: 1.11,
+    cnt: 5
   },
   {
     sku: 2,
     name: 'Product Two',
     description: 'Product Two description',
-    price: 2.22
+    price: 2.22,
+    cnt: 2
   },
   {
     sku: 3,
     name: 'Product Three',
     description: 'Product Three description',
-    price: 3.33
+    price: 3.33,
+    cnt: 3
   },
   {
     sku: 4,
