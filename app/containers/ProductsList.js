@@ -46,33 +46,18 @@ const styles = StyleSheet.create({
 class ProductsList extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      cnt: 0
-    }
-    this.props.navigation.setParams({
-      cnt: this.state.cnt
-    })
+    this.state = { cnt: 0 }
+    this.props.navigation.setParams({ cnt: 0 })
   }
 
-  static navigationOptions = ({ navigation }) => {
-    const { params } = navigation.state
-    if (!(typeof params === 'object')) return {}
-    return {
-      title: 'Products',
-      // eslint-disable-next-line react/display-name
-      headerRight: () => <Text style={styles.productsCnt}>Cart {params.cnt}</Text>
-    }
+  componentDidMount() {
+    this.props.navigation.setParams({ cnt: 0 })
   }
 
   addToCart = () => {
     const newCnt = this.state.cnt + 1
-    this.setState({
-      cnt: newCnt
-    })
-    this.props.navigation.setParams({
-      cnt: newCnt
-    })
-    console.log('clicked')
+    this.setState({ cnt: newCnt })
+    this.props.navigation.setParams({ cnt: newCnt })
   }
 
   render() {
