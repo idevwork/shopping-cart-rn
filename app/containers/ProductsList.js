@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-// import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import mock from '../mock'
 import { list } from '../styles/components/list'
 import { button } from '../styles/components/button'
+import { fetchProductsRequest } from '../redux/actions'
 
 class ProductsList extends Component {
   constructor(props) {
     super(props)
     this.state = { cnt: 0 }
   }
+
+  // componentDidMount() {
+  //   this.props.fetchProductsRequest()
+  // }
 
   addToCart = () => {
     const newCnt = this.state.cnt + 1
@@ -40,12 +46,20 @@ class ProductsList extends Component {
 }
 
 ProductsList.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  fetchProductsRequest: PropTypes.object
 }
 
-// const mapStateToProps = () => ({})
+const mapStateToProps = (state) => ({})
 
-// const mapDispatchToProps = () => ({})
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      fetchProductsRequest
+    },
+    dispatch
+  )
+})
 
 // export default connect(mapStateToProps, mapDispatchToProps)(ProductsList)
 export default ProductsList

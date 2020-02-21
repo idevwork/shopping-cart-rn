@@ -47,25 +47,36 @@ const styles = StyleSheet.create({
 class ProductDetail extends Component {
   constructor(props) {
     super(props)
-    this.state = { cnt: 0, promoCode: '' }
+    const cnt = mock
+      .filter((el) => el.cnt && el.cnt !== 0)
+      .reduce((acc, cur) => acc + cur.cnt || 0, 0)
+    this.state = { cnt: cnt, promoCode: '' }
+    this.props.navigation.setParams({ cnt: cnt })
   }
 
-  updateCart = () => (mode) => {
-    let newCnt = 0
-    switch (mode) {
-      case 'inc':
-        newCnt = this.state.cnt + 1
-        break
-      case 'dec':
-        newCnt = this.state.cnt - 1
-        if (newCnt < 0) return
-        break
-      case 'clear':
-        newCnt = 0
-        break
-      default:
-        return
-    }
+  updateCart = (sku, mode) => () => {
+    let newCnt = this.state.cnt
+    mock.map((el) => {
+      if (el.sku === sku) {
+        switch (mode) {
+          case 'inc':
+            el.cnt = el.cnt + 1
+            newCnt = newCnt + 1
+            break
+          case 'dec':
+            if (el.cnt === 0) return
+            el.cnt = el.cnt - 1
+            newCnt = newCnt - 1
+            break
+          case 'clear':
+            newCnt -= el.cnt
+            el.cnt = 0
+            break
+          default:
+            break
+        }
+      }
+    })
     this.setState({ cnt: newCnt })
     this.props.navigation.setParams({ cnt: newCnt })
   }
@@ -85,15 +96,15 @@ class ProductDetail extends Component {
                 <Text>{el.name}</Text>
               </View>
               <View style={list.rowContent}>
-                <TouchableOpacity style={button.action} onPress={this.updateCart('dec')}>
+                <TouchableOpacity style={button.action} onPress={this.updateCart(el.sku, 'dec')}>
                   <Text style={button.actionText}>-</Text>
                 </TouchableOpacity>
                 <Text>{el.cnt}</Text>
-                <TouchableOpacity style={button.action} onPress={this.updateCart('inc')}>
+                <TouchableOpacity style={button.action} onPress={this.updateCart(el.sku, 'inc')}>
                   <Text style={button.actionText}>+</Text>
                 </TouchableOpacity>
                 <Text>${el.price}</Text>
-                <TouchableOpacity style={button.action} onPress={this.updateCart('clear')}>
+                <TouchableOpacity style={button.action} onPress={this.updateCart(el.sku, 'clear')}>
                   <Text style={button.actionText}>x</Text>
                 </TouchableOpacity>
               </View>
