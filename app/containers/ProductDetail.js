@@ -142,7 +142,7 @@ class ProductDetail extends Component {
         </View>
         <View style={list.row}>
           <View style={list.rowTitle}>
-            <Text>Basket Total:</Text>
+            <Text>Basket Totasl:</Text>
           </View>
           <View style={list.rowContent}>
             <Text>${sum}</Text>
@@ -150,7 +150,7 @@ class ProductDetail extends Component {
         </View>
         <View style={styles.checkout}>
           <TouchableOpacity style={styles.checkoutButton}>
-            <Text style={styles.checkoutButtonText}>Checkout</Text>
+            <Text style={styles.checkoutButtonText}>Checkoust</Text>
           </TouchableOpacity>
         </View>
       </View>
