@@ -4,28 +4,28 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Text, View, TouchableOpacity } from 'react-native'
 
-import { fetchProductsRequest } from '../redux/actions'
-import { list } from '../styles/components/list'
-import { button } from '../styles/components/button'
+import { fetchProductsRequest, addToCart } from '../redux/actions'
+import { getSelectedProductsCnt } from '../selectors'
+import { list } from '../styles/components/List'
+import { button } from '../styles/components/Button'
 
 class ProductsList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { cnt: 0 }
-  }
-
   componentDidMount() {
-    this.props.fetchProductsRequest()
+    const { fetchProductsRequest } = this.props
+    fetchProductsRequest()
+    const { cnt, navigation } = this.props
+    navigation.setParams({ cnt: cnt })
   }
 
-  addToCart = () => {
-    const newCnt = this.state.cnt + 1
-    this.setState({ cnt: newCnt })
-    this.props.navigation.setParams({ cnt: newCnt })
+  componentDidUpdate(prevProps) {
+    const { cnt, navigation } = this.props
+    if (cnt !== prevProps.cnt) {
+      navigation.setParams({ cnt: cnt })
+    }
   }
 
   render() {
-    const products = this.props.product
+    const { products, selectedProducts, addToCart } = this.props
 
     return (
       <View>
@@ -35,8 +35,12 @@ class ProductsList extends Component {
               <Text>{el.name}</Text>
             </View>
             <View style={list.rowContent}>
-              <Text>${el.price}</Text>
-              <TouchableOpacity style={button.action} onPress={this.addToCart}>
+              <Text>
+                ${el.price}
+                {Object.prototype.hasOwnProperty.call(selectedProducts, el.sku) &&
+                  ` X ${selectedProducts[el.sku]}`}
+              </Text>
+              <TouchableOpacity style={button.action} onPress={() => addToCart(el.sku)}>
                 <Text style={button.actionText}>+</Text>
               </TouchableOpacity>
             </View>
@@ -50,17 +54,23 @@ class ProductsList extends Component {
 ProductsList.propTypes = {
   navigation: PropTypes.object,
   fetchProductsRequest: PropTypes.func,
-  product: PropTypes.array
+  addToCart: PropTypes.func,
+  products: PropTypes.array,
+  selectedProducts: PropTypes.object,
+  cnt: PropTypes.number
 }
 
 const mapStateToProps = (state) => ({
-  product: state.product
+  products: state.product,
+  selectedProducts: state.cart.selectedProducts,
+  cnt: getSelectedProductsCnt(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators(
     {
-      fetchProductsRequest
+      fetchProductsRequest,
+      addToCart
     },
     dispatch
   )

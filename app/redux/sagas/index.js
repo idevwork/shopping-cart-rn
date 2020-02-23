@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects'
-import { fetchProductsWatcher } from './productSagas'
+import { applyPromoCodeWatcher, checkoutWatcher } from './cartSaga'
+import { fetchProductsWatcher } from './productSaga'
 
 export default function* rootSaga() {
-  yield all([fetchProductsWatcher()])
+  yield all([applyPromoCodeWatcher(), checkoutWatcher(), fetchProductsWatcher()])
 }
