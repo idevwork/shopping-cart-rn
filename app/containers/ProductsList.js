@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Text, View, TouchableOpacity } from 'react-native'
 
 import { fetchProductsRequest, addToCart } from '../redux/actions'
-import { getSelectedProductsCnt } from '../selectors'
+import { getProductsCntInCart } from '../selectors'
 import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
@@ -24,8 +24,13 @@ class ProductsList extends Component {
     }
   }
 
+  handleAddToCart = (sku) => () => {
+    const { addToCart } = this.props
+    addToCart(sku)
+  }
+
   render() {
-    const { products, selectedProducts, addToCart } = this.props
+    const { products, productsInCart } = this.props
 
     return (
       <View>
@@ -37,10 +42,10 @@ class ProductsList extends Component {
             <View style={list.rowContent}>
               <Text>
                 ${el.price}
-                {Object.prototype.hasOwnProperty.call(selectedProducts, el.sku) &&
-                  ` X ${selectedProducts[el.sku]}`}
+                {Object.prototype.hasOwnProperty.call(productsInCart, el.sku) &&
+                  ` X ${productsInCart[el.sku]}`}
               </Text>
-              <TouchableOpacity style={button.action} onPress={() => addToCart(el.sku)}>
+              <TouchableOpacity style={button.action} onPress={this.handleAddToCart(el.sku)}>
                 <Text style={button.actionText}>+</Text>
               </TouchableOpacity>
             </View>
@@ -56,14 +61,14 @@ ProductsList.propTypes = {
   fetchProductsRequest: PropTypes.func,
   addToCart: PropTypes.func,
   products: PropTypes.array,
-  selectedProducts: PropTypes.object,
+  productsInCart: PropTypes.object,
   cnt: PropTypes.number
 }
 
 const mapStateToProps = (state) => ({
   products: state.product,
-  selectedProducts: state.cart.selectedProducts,
-  cnt: getSelectedProductsCnt(state)
+  productsInCart: state.cart.productsInCart,
+  cnt: getProductsCntInCart(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({

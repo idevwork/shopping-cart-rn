@@ -1,7 +1,7 @@
 const cartActionTypes = {
   ADD_TO_CART: 'CART/ADD_TO_CART',
   REMOVE_FROM_CART: 'CART/REMOVE_FROM_CART',
-  CLEAR_CART: 'CART/CLEAR_CART',
+  CLEAR_FROM_CART: 'CART/CLEAR_FROM_CART',
 
   APPLY_PROMO_CODE_REQUEST: 'CART/APPLY_PROMO_CODE_REQUEST',
   APPLY_PROMO_CODE_SUCCEED: 'CART/APPLY_PROMO_CODE_SUCCEED',
@@ -38,8 +38,8 @@ export const removeFromCart = (sku) => ({
   sku
 })
 
-export const clearCart = (sku) => ({
-  type: cartActionTypes.CLEAR_CART,
+export const clearFromCart = (sku) => ({
+  type: cartActionTypes.CLEAR_FROM_CART,
   sku
 })
 

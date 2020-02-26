@@ -7,12 +7,12 @@ import { connect } from 'react-redux'
 import {
   addToCart,
   removeFromCart,
-  clearCart,
+  clearFromCart,
   applyPromoCode,
   checkoutRequest,
   cartReset
 } from '../redux/actions'
-import { getSelectedProductsDetail, getSelectedProductsCnt, getPrices } from '../selectors'
+import { getProductsDetailInCart, getProductsCntInCart, getPrices } from '../selectors'
 import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 import styles from '../styles/pages/ProductDetail'
@@ -35,7 +35,11 @@ class ProductDetail extends Component {
     if (cnt !== prevProps.cnt) {
       navigation.setParams({ cnt: cnt })
     }
-    if (checkoutStatus && checkoutStatus !== prevProps.checkoutStatus) {
+    if (
+      checkoutStatus &&
+      Object.keys(checkoutStatus).length !== 0 &&
+      checkoutStatus !== prevProps.checkoutStatus
+    ) {
       const { cartReset } = this.props
       alert(checkoutStatus.msg)
       cartReset()
@@ -43,22 +47,35 @@ class ProductDetail extends Component {
   }
 
   handleCheckoutRequest = () => {
-    const { checkoutRequest, selectedProductsDetail } = this.props
-    return checkoutRequest(selectedProductsDetail.map((el) => ({ sku: el.sku, quantity: el.cnt })))
+    const { checkoutRequest, productsDetailInCart } = this.props
+    return checkoutRequest(productsDetailInCart.map((el) => ({ sku: el.sku, quantity: el.cnt })))
+  }
+
+  handleAddToCart = (sku) => () => {
+    const { addToCart } = this.props
+    addToCart(sku)
+  }
+
+  handleRemoveFromCart = (sku) => () => {
+    const { removeFromCart } = this.props
+    removeFromCart(sku)
+  }
+
+  handleClearFromCart = (sku) => () => {
+    const { clearFromCart } = this.props
+    clearFromCart(sku)
+  }
+
+  handleApplyPromoCode = (promoCode) => () => {
+    const { applyPromoCode } = this.props
+    applyPromoCode(promoCode)
   }
 
   render() {
-    const {
-      selectedProductsDetail,
-      addToCart,
-      removeFromCart,
-      clearCart,
-      applyPromoCode,
-      prices
-    } = this.props
+    const { productsDetailInCart, prices } = this.props
     return (
       <View>
-        {selectedProductsDetail
+        {productsDetailInCart
           .filter((el) => el.cnt && el.cnt !== 0)
           .map((el) => (
             <View key={el.sku} style={list.row}>
@@ -66,15 +83,15 @@ class ProductDetail extends Component {
                 <Text>{el.name}</Text>
               </View>
               <View style={list.rowContent}>
-                <TouchableOpacity style={button.action} onPress={() => removeFromCart(el.sku)}>
+                <TouchableOpacity style={button.action} onPress={this.handleRemoveFromCart(el.sku)}>
                   <Text style={button.actionText}>-</Text>
                 </TouchableOpacity>
                 <Text>{el.cnt}</Text>
-                <TouchableOpacity style={button.action} onPress={() => addToCart(el.sku)}>
+                <TouchableOpacity style={button.action} onPress={this.handleAddToCart(el.sku)}>
                   <Text style={button.actionText}>+</Text>
                 </TouchableOpacity>
                 <Text>${el.price}</Text>
-                <TouchableOpacity style={button.action} onPress={() => clearCart(el.sku)}>
+                <TouchableOpacity style={button.action} onPress={this.handleClearFromCart(el.sku)}>
                   <Text style={button.actionText}>x</Text>
                 </TouchableOpacity>
               </View>
@@ -91,7 +108,7 @@ class ProductDetail extends Component {
             />
             <TouchableOpacity
               style={styles.promoCodeButton}
-              onPress={() => applyPromoCode(this.state.promoCode)}
+              onPress={this.handleApplyPromoCode(this.state.promoCode)}
             >
               <Text style={styles.promoCodeText}>Apply</Text>
             </TouchableOpacity>
@@ -133,10 +150,10 @@ class ProductDetail extends Component {
 
 ProductDetail.propTypes = {
   navigation: PropTypes.object,
-  selectedProductsDetail: PropTypes.array,
+  productsDetailInCart: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
-  clearCart: PropTypes.func,
+  clearFromCart: PropTypes.func,
   cnt: PropTypes.number,
   applyPromoCode: PropTypes.func,
   prices: PropTypes.object,
@@ -146,8 +163,8 @@ ProductDetail.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  selectedProductsDetail: getSelectedProductsDetail(state),
-  cnt: getSelectedProductsCnt(state),
+  productsDetailInCart: getProductsDetailInCart(state),
+  cnt: getProductsCntInCart(state),
   prices: getPrices(state),
   checkoutStatus: state.cart.checkout
 })
@@ -157,7 +174,7 @@ const mapDispatchToProps = (dispatch) => ({
     {
       addToCart,
       removeFromCart,
-      clearCart,
+      clearFromCart,
       applyPromoCode,
       checkoutRequest,
       cartReset

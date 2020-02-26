@@ -1,4 +1,4 @@
-import { color } from '../utils/variables'
+import { color } from '../abstracts/variables'
 
 export const list = {
   row: {

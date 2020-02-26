@@ -1,4 +1,4 @@
-import { color } from '../utils/variables'
+import { color } from '../abstracts/variables'
 
 export const button = {
   action: {
@@ -9,14 +9,10 @@ export const button = {
     justifyContent: 'center',
     marginHorizontal: 10,
     width: 30
-},
+  },
   actionText: {
     color: color.white
   },
-  normal: {
-
-  },
-  normalText: {
-
-  }
+  normal: {},
+  normalText: {}
 }

@@ -18,56 +18,54 @@ const styles = {
 
 const Stack = createStackNavigator()
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="ProductsList"
-          screenOptions={{ headerTitleAlign: 'center' }}
-        >
-          <Stack.Screen
-            name="ProductsList"
-            component={ProductsList}
-            options={({ route, navigation: { navigate } }) => {
-              const params = route.params || { cnt: 0 }
-              return {
-                title: 'Products',
-                // eslint-disable-next-line react/display-name
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={styles.headerRightButton}
-                    onPress={() => navigate('ProductDetail')}
-                  >
-                    <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
-                  </TouchableOpacity>
-                )
-              }
-            }}
-          />
-          <Stack.Screen
-            name="ProductDetail"
-            component={ProductDetail}
-            options={({ route, navigation: { navigate } }) => {
-              const params = route.params || { cnt: 0 }
-              return {
-                title: 'Checkout',
-                // eslint-disable-next-line react/display-name
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={styles.headerRightButton}
-                    onPress={() => navigate('ProductDetail')}
-                  >
-                    <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
-                  </TouchableOpacity>
-                )
-              }
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  )
-}
+const App = () => (
+  <Provider store={store}>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="ProductsList"
+        screenOptions={{ headerTitleAlign: 'center' }}
+      >
+        <Stack.Screen
+          name="ProductsList"
+          component={ProductsList}
+          options={({ route, navigation: { navigate } }) => {
+            const params = route.params || { cnt: 0 }
+            return {
+              title: 'Products',
+              // eslint-disable-next-line react/display-name
+              headerRight: () => (
+                <TouchableOpacity
+                  style={styles.headerRightButton}
+                  onPress={() => navigate('ProductDetail')}
+                >
+                  <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
+                </TouchableOpacity>
+              )
+            }
+          }}
+        />
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetail}
+          options={({ route, navigation: { navigate } }) => {
+            const params = route.params || { cnt: 0 }
+            return {
+              title: 'Checkout',
+              // eslint-disable-next-line react/display-name
+              headerRight: () => (
+                <TouchableOpacity
+                  style={styles.headerRightButton}
+                  onPress={() => navigate('ProductDetail')}
+                >
+                  <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
+                </TouchableOpacity>
+              )
+            }
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </Provider>
+)
 
 export default App
