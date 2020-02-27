@@ -71,6 +71,10 @@ class ProductDetail extends Component {
     applyPromoCode(promoCode)
   }
 
+  handleTextEvent = (text) => {
+    this.setState({ promoCode: text })
+  }
+
   render() {
     const { productsDetailInCart, prices } = this.props
     return (
@@ -102,10 +106,7 @@ class ProductDetail extends Component {
             <Text>Promo Code</Text>
           </View>
           <View style={[list.rowContent, styles.promoCode]}>
-            <TextInput
-              style={styles.promoCodeInput}
-              onChangeText={(text) => this.setState({ promoCode: text })}
-            />
+            <TextInput style={styles.promoCodeInput} onChangeText={this.handleTextEvent} />
             <TouchableOpacity
               style={styles.promoCodeButton}
               onPress={this.handleApplyPromoCode(this.state.promoCode)}

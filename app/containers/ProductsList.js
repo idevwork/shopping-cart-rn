@@ -10,6 +10,10 @@ import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
 class ProductsList extends Component {
+  static navigationOptions = {
+    title: 'Products'
+  }
+
   componentDidMount() {
     const { fetchProductsRequest } = this.props
     fetchProductsRequest()
