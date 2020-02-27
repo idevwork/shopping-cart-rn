@@ -1,18 +1,15 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TouchableOpacity, Text } from 'react-native'
 import { Provider } from 'react-redux'
 import ProductsList from './app/containers/ProductsList'
 import ProductDetail from './app/containers/ProductDetail'
+import HeaderRight from './app/components/HeaderRight'
 import store from './app/redux/store'
 
 const styles = {
-  headerRightButton: {
-    marginRight: 20
-  },
-  headerRightButtonText: {
-    color: 'green'
+  screenOptions: {
+    headerTitleAlign: 'center'
   }
 }
 
@@ -21,10 +18,7 @@ const Stack = createStackNavigator()
 const App = () => (
   <Provider store={store}>
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="ProductsList"
-        screenOptions={{ headerTitleAlign: 'center' }}
-      >
+      <Stack.Navigator initialRouteName="ProductsList" screenOptions={styles.screenOptions}>
         <Stack.Screen
           name="ProductsList"
           component={ProductsList}
@@ -34,12 +28,7 @@ const App = () => (
               title: 'Products',
               // eslint-disable-next-line react/display-name
               headerRight: () => (
-                <TouchableOpacity
-                  style={styles.headerRightButton}
-                  onPress={() => navigate('ProductDetail')}
-                >
-                  <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
-                </TouchableOpacity>
+                <HeaderRight params={params} navigate={navigate} navigateTo="ProductDetail" />
               )
             }
           }}
@@ -53,12 +42,7 @@ const App = () => (
               title: 'Checkout',
               // eslint-disable-next-line react/display-name
               headerRight: () => (
-                <TouchableOpacity
-                  style={styles.headerRightButton}
-                  onPress={() => navigate('ProductDetail')}
-                >
-                  <Text style={styles.headerRightButtonText}>Cart {params.cnt}</Text>
-                </TouchableOpacity>
+                <HeaderRight params={params} navigate={navigate} navigateTo="ProductDetail" />
               )
             }
           }}
