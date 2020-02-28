@@ -4,6 +4,7 @@ import { Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import ProductDetailItem from '../components/ProductDetailItem'
 import {
   addToCart,
   removeFromCart,
@@ -12,62 +13,63 @@ import {
   checkoutRequest,
   cartReset
 } from '../redux/actions'
-import { getProductsDetailInCart, getProductsCntInCart, getPrices } from '../selectors'
+import {
+  getProductsDetailInCart,
+  getProductsCntInCart,
+  getPrices
+} from '../selectors'
 import { list } from '../styles/components/List'
-import { button } from '../styles/components/Button'
 import styles from '../styles/pages/ProductDetail'
 
 class ProductDetail extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      promoCode: ''
-    }
+  state = {
+    promoCode: ''
   }
 
   componentDidMount() {
     const { cnt, navigation } = this.props
-    navigation.setParams({ cnt: cnt })
+    navigation.setParams({ cnt })
   }
 
   componentDidUpdate(prevProps) {
-    const { cnt, navigation, checkoutStatus } = this.props
+    const { cnt, navigation, checkoutStatus, cartReset } = this.props
     if (cnt !== prevProps.cnt) {
-      navigation.setParams({ cnt: cnt })
+      navigation.setParams({ cnt })
     }
     if (
       checkoutStatus &&
       Object.keys(checkoutStatus).length !== 0 &&
       checkoutStatus !== prevProps.checkoutStatus
     ) {
-      const { cartReset } = this.props
-      alert(checkoutStatus.msg)
       cartReset()
     }
   }
 
   handleCheckoutRequest = () => {
     const { checkoutRequest, productsDetailInCart } = this.props
-    return checkoutRequest(productsDetailInCart.map((el) => ({ sku: el.sku, quantity: el.cnt })))
+    return checkoutRequest(
+      productsDetailInCart.map((el) => ({ sku: el.sku, quantity: el.cnt }))
+    )
   }
 
-  handleAddToCart = (sku) => () => {
+  handleAddToCart = (sku) => {
     const { addToCart } = this.props
     addToCart(sku)
   }
 
-  handleRemoveFromCart = (sku) => () => {
+  handleRemoveFromCart = (sku) => {
     const { removeFromCart } = this.props
     removeFromCart(sku)
   }
 
-  handleClearFromCart = (sku) => () => {
+  handleClearFromCart = (sku) => {
     const { clearFromCart } = this.props
     clearFromCart(sku)
   }
 
-  handleApplyPromoCode = (promoCode) => () => {
+  handleApplyPromoCode = () => {
     const { applyPromoCode } = this.props
+    const { promoCode } = this.state
     applyPromoCode(promoCode)
   }
 
@@ -75,41 +77,37 @@ class ProductDetail extends Component {
     this.setState({ promoCode: text })
   }
 
+  filterProductsDetailList = (el) => el.cnt && el.cnt !== 0
+
+  renderProductsDetailList = (product) => (
+    <ProductDetailItem
+      key={product.sku}
+      product={product}
+      handleRemoveFromCart={this.handleRemoveFromCart}
+      handleAddToCart={this.handleAddToCart}
+      handleClearFromCart={this.handleClearFromCart}
+    />
+  )
+
   render() {
     const { productsDetailInCart, prices } = this.props
     return (
       <View>
         {productsDetailInCart
-          .filter((el) => el.cnt && el.cnt !== 0)
-          .map((el) => (
-            <View key={el.sku} style={list.row}>
-              <View style={list.rowTitle}>
-                <Text>{el.name}</Text>
-              </View>
-              <View style={list.rowContent}>
-                <TouchableOpacity style={button.action} onPress={this.handleRemoveFromCart(el.sku)}>
-                  <Text style={button.actionText}>-</Text>
-                </TouchableOpacity>
-                <Text>{el.cnt}</Text>
-                <TouchableOpacity style={button.action} onPress={this.handleAddToCart(el.sku)}>
-                  <Text style={button.actionText}>+</Text>
-                </TouchableOpacity>
-                <Text>${el.price}</Text>
-                <TouchableOpacity style={button.action} onPress={this.handleClearFromCart(el.sku)}>
-                  <Text style={button.actionText}>x</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
+          .filter(this.filterProductsDetailList)
+          .map(this.renderProductsDetailList)}
         <View style={list.row}>
           <View style={list.rowTitle}>
             <Text>Promo Code</Text>
           </View>
           <View style={[list.rowContent, styles.promoCode]}>
-            <TextInput style={styles.promoCodeInput} onChangeText={this.handleTextEvent} />
+            <TextInput
+              style={styles.promoCodeInput}
+              onChangeText={this.handleTextEvent}
+            />
             <TouchableOpacity
               style={styles.promoCodeButton}
-              onPress={this.handleApplyPromoCode(this.state.promoCode)}
+              onPress={this.handleApplyPromoCode}
             >
               <Text style={styles.promoCodeText}>Apply</Text>
             </TouchableOpacity>
@@ -140,7 +138,10 @@ class ProductDetail extends Component {
           </View>
         </View>
         <View style={styles.checkout}>
-          <TouchableOpacity style={styles.checkoutButton} onPress={this.handleCheckoutRequest}>
+          <TouchableOpacity
+            style={styles.checkoutButton}
+            onPress={this.handleCheckoutRequest}
+          >
             <Text style={styles.checkoutButtonText}>Checkout</Text>
           </TouchableOpacity>
         </View>

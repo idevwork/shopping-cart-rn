@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { View } from 'react-native'
 
 import { fetchProductsRequest, addToCart } from '../redux/actions'
 import { getProductsCntInCart } from '../selectors'
-import { list } from '../styles/components/List'
-import { button } from '../styles/components/Button'
+import ProductsListItem from '../components/ProductsListItem'
 
 class ProductsList extends Component {
   static navigationOptions = {
@@ -15,9 +14,8 @@ class ProductsList extends Component {
   }
 
   componentDidMount() {
-    const { fetchProductsRequest } = this.props
+    const { fetchProductsRequest, cnt, navigation } = this.props
     fetchProductsRequest()
-    const { cnt, navigation } = this.props
     navigation.setParams({ cnt: cnt })
   }
 
@@ -28,35 +26,26 @@ class ProductsList extends Component {
     }
   }
 
-  handleAddToCart = (sku) => () => {
+  handleAddToCart = (sku) => {
     const { addToCart } = this.props
     addToCart(sku)
   }
 
-  render() {
-    const { products, productsInCart } = this.props
-
+  renderProductsList = (el) => {
+    const { productsInCart } = this.props
     return (
-      <View>
-        {products.map((el) => (
-          <View key={el.sku} style={list.row}>
-            <View>
-              <Text>{el.name}</Text>
-            </View>
-            <View style={list.rowContent}>
-              <Text>
-                ${el.price}
-                {Object.prototype.hasOwnProperty.call(productsInCart, el.sku) &&
-                  ` X ${productsInCart[el.sku]}`}
-              </Text>
-              <TouchableOpacity style={button.action} onPress={this.handleAddToCart(el.sku)}>
-                <Text style={button.actionText}>+</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
-      </View>
+      <ProductsListItem
+        key={el.sku}
+        productsInCart={productsInCart}
+        product={el}
+        handleAddCart={this.handleAddToCart}
+      />
     )
+  }
+
+  render() {
+    const { products } = this.props
+    return <View>{products.map(this.renderProductsList)}</View>
   }
 }
 

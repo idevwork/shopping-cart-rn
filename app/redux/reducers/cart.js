@@ -6,34 +6,23 @@ const initialState = {
   checkout: {}
 }
 
-const handleProductsInCart = (state, productId, mode) => {
-  const productsInCart = { ...state.productsInCart }
-  if (Object.prototype.hasOwnProperty.call(productsInCart, productId)) {
-    switch (mode) {
-      case 'add':
-        productsInCart[productId] += 1
-        break
-      case 'remove':
-        productsInCart[productId] -= 1
-        break
-      case 'clear':
-        delete productsInCart[productId]
-        break
-    }
-    if (productsInCart[productId] === 0) delete productsInCart[productId]
-  } else productsInCart[productId] = 1
-
-  return { ...state, productsInCart }
-}
-
 const cart = (state = initialState, action) => {
+  const productsInCart = { ...state.productsInCart }
+  const id = action.sku
   switch (action.type) {
     case actionTypes.ADD_TO_CART:
-      return handleProductsInCart(state, action.sku, 'add')
+      if (Object.prototype.hasOwnProperty.call(productsInCart, id))
+        productsInCart[id] += 1
+      else productsInCart[id] = 1
+      return { ...state, productsInCart }
     case actionTypes.REMOVE_FROM_CART:
-      return handleProductsInCart(state, action.sku, 'remove')
+      productsInCart[id] -= 1
+      if (productsInCart[id] === 0) delete productsInCart[id]
+      return { ...state, productsInCart }
     case actionTypes.CLEAR_FROM_CART:
-      return handleProductsInCart(state, action.sku, 'clear')
+      if (Object.prototype.hasOwnProperty.call(productsInCart, id))
+        delete productsInCart[id]
+      return { ...state, productsInCart }
     case actionTypes.CHECKOUT_SUCCEED:
       return { ...state, checkout: action.response }
     case actionTypes.CART_RESET:
@@ -44,6 +33,7 @@ const cart = (state = initialState, action) => {
       }
     case actionTypes.APPLY_PROMO_CODE_SUCCEED:
       return { ...state, promoCode: action.response }
+
     default:
       return state
   }

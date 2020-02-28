@@ -25,14 +25,17 @@ class App extends Component {
   staticOptions = ({ route, navigation: { navigate } }) => {
     const params = route.params || { cnt: 0 }
     return {
-      headerRight: this.HeaderRight(params, navigate, 'ProductDetail')
+      headerRight: this.headerRight(params, navigate, 'ProductDetail')
     }
   }
 
-  HeaderRight = (params, navigate, navigateTo) => () => {
+  headerRight = (params, navigate, navigateTo) => () => {
     const handlePressEvent = () => navigate(navigateTo)
     return (
-      <TouchableOpacity style={styles.headerRightButton} onPress={handlePressEvent}>
+      <TouchableOpacity
+        style={styles.headerRightButton}
+        onPress={handlePressEvent}
+      >
         <Text style={styles.headerRightButtonText}>Carts {params.cnt}</Text>
       </TouchableOpacity>
     )
@@ -42,7 +45,10 @@ class App extends Component {
     return (
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="ProductsList" screenOptions={styles.screenOptions}>
+          <Stack.Navigator
+            initialRouteName="ProductsList"
+            screenOptions={styles.screenOptions}
+          >
             <Stack.Screen
               name="ProductsList"
               component={ProductsList}
