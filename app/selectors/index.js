@@ -17,13 +17,21 @@ export const getProductsDetailInCart = createSelector(
   }
 )
 
+export const getProductsInCartToCheckout = (state) => {
+  return getProductsDetailInCart(state).map((el) => ({
+    sku: el.sku,
+    quantity: el.cnt
+  }))
+}
+
 export const getTotalPrice = createSelector(
   getProductsInCart,
   getProducts,
   (productsInCart, products) =>
     Object.keys(productsInCart)
       .reduce((acc, cur) => {
-        const price = products.find((product) => product.sku.toString() === cur).price || 0
+        const price =
+          products.find((product) => product.sku.toString() === cur).price || 0
         return acc + price * productsInCart[cur]
       }, 0)
       .toFixed(2)

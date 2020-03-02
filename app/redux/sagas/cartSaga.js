@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import actionTypes from '../actions'
 import { applyPromoCode, checkout } from '../../service/cart'
-
+import config from '../../service/config'
 function* applyPromoCodeSaga({ promoCode }) {
   try {
     const res = yield call(applyPromoCode, promoCode)
@@ -20,7 +20,10 @@ export function* applyPromoCodeWatcher() {
 
 function* checkoutSaga({ cart }) {
   try {
-    const res = yield call(checkout, { basket: cart, cardNumber: '4539456463019519' })
+    const res = yield call(checkout, {
+      basket: cart,
+      cardNumber: config.cardNumber
+    })
     yield put({
       type: actionTypes.CHECKOUT_SUCCEED,
       response: res.data.errors ? res.data.errors[0] : res.data

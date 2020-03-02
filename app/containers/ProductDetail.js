@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
 import ProductDetailItem from '../components/ProductDetailItem'
 import {
   addToCart,
@@ -16,6 +15,7 @@ import {
 import {
   getProductsDetailInCart,
   getProductsCntInCart,
+  getProductsInCartToCheckout,
   getPrices
 } from '../selectors'
 import { list } from '../styles/components/List'
@@ -46,10 +46,8 @@ class ProductDetail extends Component {
   }
 
   handleCheckoutRequest = () => {
-    const { checkoutRequest, productsDetailInCart } = this.props
-    return checkoutRequest(
-      productsDetailInCart.map((el) => ({ sku: el.sku, quantity: el.cnt }))
-    )
+    const { checkoutRequest, productsInCartToCheckout } = this.props
+    return checkoutRequest(productsInCartToCheckout)
   }
 
   handleAddToCart = (sku) => {
@@ -77,8 +75,6 @@ class ProductDetail extends Component {
     this.setState({ promoCode: text })
   }
 
-  filterProductsDetailList = (el) => el.cnt && el.cnt !== 0
-
   renderProductsDetailList = (product) => (
     <ProductDetailItem
       key={product.sku}
@@ -93,9 +89,7 @@ class ProductDetail extends Component {
     const { productsDetailInCart, prices } = this.props
     return (
       <View>
-        {productsDetailInCart
-          .filter(this.filterProductsDetailList)
-          .map(this.renderProductsDetailList)}
+        {productsDetailInCart.map(this.renderProductsDetailList)}
         <View style={list.row}>
           <View style={list.rowTitle}>
             <Text>Promo Code</Text>
@@ -153,6 +147,7 @@ class ProductDetail extends Component {
 ProductDetail.propTypes = {
   navigation: PropTypes.object,
   productsDetailInCart: PropTypes.array,
+  productsInCartToCheckout: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
   clearFromCart: PropTypes.func,
@@ -166,6 +161,7 @@ ProductDetail.propTypes = {
 
 const mapStateToProps = (state) => ({
   productsDetailInCart: getProductsDetailInCart(state),
+  productsInCartToCheckout: getProductsInCartToCheckout(state),
   cnt: getProductsCntInCart(state),
   prices: getPrices(state),
   checkoutStatus: state.cart.checkout
