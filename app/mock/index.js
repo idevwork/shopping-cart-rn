@@ -4,21 +4,21 @@ const mock = [
     name: 'Product One',
     description: 'Product One description',
     price: 1.11,
-    cnt: 5
+    quantity: 5
   },
   {
     sku: 2,
     name: 'Product Two',
     description: 'Product Two description',
     price: 2.22,
-    cnt: 2
+    quantity: 2
   },
   {
     sku: 3,
     name: 'Product Three',
     description: 'Product Three description',
     price: 3.33,
-    cnt: 3
+    quantity: 3
   },
   {
     sku: 4,

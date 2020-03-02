@@ -17,10 +17,9 @@ export const applyPromoCode = (promoCode) => ({
   promoCode
 })
 
-export const checkoutRequest = (cart) => {
+export const checkoutRequest = () => {
   return {
-    type: cartActionTypes.CHECKOUT_REQUEST,
-    cart
+    type: cartActionTypes.CHECKOUT_REQUEST
   }
 }
 

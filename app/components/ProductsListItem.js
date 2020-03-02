@@ -5,20 +5,22 @@ import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
 const ProductsListItem = ({ product, productsInCart, handleAddCart }) => {
+  const { sku, name, price } = product
+
   const onAddToCart = () => {
-    handleAddCart(product.sku)
+    handleAddCart(sku)
   }
 
   return (
-    <View key={product.sku} style={list.row}>
+    <View key={sku} style={list.row}>
       <View>
-        <Text>{product.name}</Text>
+        <Text>{name}</Text>
       </View>
       <View style={list.rowContent}>
         <Text>
-          ${product.price}
-          {Object.prototype.hasOwnProperty.call(productsInCart, product.sku) &&
-            ` X ${productsInCart[product.sku]}`}
+          ${price}
+          {Object.prototype.hasOwnProperty.call(productsInCart, sku) &&
+            ` X ${productsInCart[sku]}`}
         </Text>
         <TouchableOpacity style={button.action} onPress={onAddToCart}>
           <Text style={button.actionText}>+</Text>

@@ -14,8 +14,7 @@ import {
 } from '../redux/actions'
 import {
   getProductsDetailInCart,
-  getProductsCntInCart,
-  getProductsInCartToCheckout,
+  getProductsQuantityInCart,
   getPrices
 } from '../selectors'
 import { list } from '../styles/components/List'
@@ -27,14 +26,14 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    const { cnt, navigation } = this.props
-    navigation.setParams({ cnt })
+    const { quantity, navigation } = this.props
+    navigation.setParams({ quantity })
   }
 
   componentDidUpdate(prevProps) {
-    const { cnt, navigation, checkoutStatus, cartReset } = this.props
-    if (cnt !== prevProps.cnt) {
-      navigation.setParams({ cnt })
+    const { quantity, navigation, checkoutStatus, cartReset } = this.props
+    if (quantity !== prevProps.quantity) {
+      navigation.setParams({ quantity })
     }
     if (
       checkoutStatus &&
@@ -46,8 +45,8 @@ class ProductDetail extends Component {
   }
 
   handleCheckoutRequest = () => {
-    const { checkoutRequest, productsInCartToCheckout } = this.props
-    return checkoutRequest(productsInCartToCheckout)
+    const { checkoutRequest } = this.props
+    return checkoutRequest()
   }
 
   handleAddToCart = (sku) => {
@@ -147,11 +146,10 @@ class ProductDetail extends Component {
 ProductDetail.propTypes = {
   navigation: PropTypes.object,
   productsDetailInCart: PropTypes.array,
-  productsInCartToCheckout: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
   clearFromCart: PropTypes.func,
-  cnt: PropTypes.number,
+  quantity: PropTypes.number,
   applyPromoCode: PropTypes.func,
   prices: PropTypes.object,
   checkoutRequest: PropTypes.func,
@@ -161,8 +159,7 @@ ProductDetail.propTypes = {
 
 const mapStateToProps = (state) => ({
   productsDetailInCart: getProductsDetailInCart(state),
-  productsInCartToCheckout: getProductsInCartToCheckout(state),
-  cnt: getProductsCntInCart(state),
+  quantity: getProductsQuantityInCart(state),
   prices: getPrices(state),
   checkoutStatus: state.cart.checkout
 })

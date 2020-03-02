@@ -17,7 +17,7 @@ const Stack = createStackNavigator()
 
 class App extends Component {
   staticOptions = ({ route, navigation: { navigate } }) => {
-    const params = route.params || { cnt: 0 }
+    const params = route.params || { quantity: 0 }
     return {
       headerRight: () => (
         <HeaderRight

@@ -31,7 +31,7 @@ const ProductDetailItem = ({
         <TouchableOpacity style={button.action} onPress={onRemoveFromCart}>
           <Text style={button.actionText}>-</Text>
         </TouchableOpacity>
-        <Text>{product.cnt}</Text>
+        <Text>{product.quantity}</Text>
         <TouchableOpacity style={button.action} onPress={onAddToCart}>
           <Text style={button.actionText}>+</Text>
         </TouchableOpacity>

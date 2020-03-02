@@ -3,7 +3,7 @@ import { createSelector } from 'reselect'
 export const getProducts = (state) => state.product
 export const getProductsInCart = (state) => state.cart.productsInCart
 
-export const getProductsCntInCart = (state) =>
+export const getProductsQuantityInCart = (state) =>
   Object.values(state.cart.productsInCart).reduce((acc, cur) => acc + cur, 0)
 
 export const getProductsDetailInCart = createSelector(
@@ -12,15 +12,16 @@ export const getProductsDetailInCart = createSelector(
   (productsInCart, products) => {
     return Object.keys(productsInCart).map((selectedId) => ({
       ...products.find((product) => selectedId === product.sku.toString()),
-      cnt: productsInCart[selectedId]
+      quantity: productsInCart[selectedId]
     }))
   }
 )
 
-export const getProductsInCartToCheckout = (state) => {
-  return getProductsDetailInCart(state).map((el) => ({
-    sku: el.sku,
-    quantity: el.cnt
+export const getBasket = (state) => {
+  const productsInCart = getProductsInCart(state)
+  return Object.keys(productsInCart).map((el) => ({
+    sku: el,
+    quantity: productsInCart[el]
   }))
 }
 

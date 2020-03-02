@@ -18,7 +18,7 @@ const HeaderRight = ({ params, navigate, navigateTo }) => {
       style={styles.headerRightButton}
       onPress={handlePressEvent}
     >
-      <Text style={styles.headerRightButtonText}>Carts {params.cnt}</Text>
+      <Text style={styles.headerRightButtonText}>Carts {params.quantity}</Text>
     </TouchableOpacity>
   )
 }
