@@ -33,9 +33,10 @@ class ProductsList extends Component {
 
   renderProductsList = (el) => {
     const { productsInCart } = this.props
+    const { sku } = el
     return (
       <ProductsListItem
-        key={el.sku}
+        key={sku}
         productsInCart={productsInCart}
         product={el}
         handleAddCart={this.handleAddToCart}

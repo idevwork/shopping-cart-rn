@@ -4,9 +4,11 @@ import PropTypes from 'prop-types'
 import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
-const ProductsListItem = ({ product, productsInCart, handleAddCart }) => {
-  const { sku, name, price } = product
-
+const ProductsListItem = ({
+  product: { sku, name, price },
+  productsInCart,
+  handleAddCart
+}) => {
   const onAddToCart = () => {
     handleAddCart(sku)
   }

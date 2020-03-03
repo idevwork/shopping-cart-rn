@@ -11,14 +11,14 @@ const styles = {
   }
 }
 
-const HeaderRight = ({ params, navigate, navigateTo }) => {
+const HeaderRight = ({ params: { quantity }, navigate, navigateTo }) => {
   const handlePressEvent = () => navigate(navigateTo)
   return (
     <TouchableOpacity
       style={styles.headerRightButton}
       onPress={handlePressEvent}
     >
-      <Text style={styles.headerRightButtonText}>Carts {params.quantity}</Text>
+      <Text style={styles.headerRightButtonText}>Carts {quantity}</Text>
     </TouchableOpacity>
   )
 }

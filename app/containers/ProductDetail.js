@@ -74,18 +74,24 @@ class ProductDetail extends Component {
     this.setState({ promoCode: text })
   }
 
-  renderProductsDetailList = (product) => (
-    <ProductDetailItem
-      key={product.sku}
-      product={product}
-      handleRemoveFromCart={this.handleRemoveFromCart}
-      handleAddToCart={this.handleAddToCart}
-      handleClearFromCart={this.handleClearFromCart}
-    />
-  )
+  renderProductsDetailList = (product) => {
+    const { sku } = product
+    return (
+      <ProductDetailItem
+        key={sku}
+        product={product}
+        handleRemoveFromCart={this.handleRemoveFromCart}
+        handleAddToCart={this.handleAddToCart}
+        handleClearFromCart={this.handleClearFromCart}
+      />
+    )
+  }
 
   render() {
-    const { productsDetailInCart, prices } = this.props
+    const {
+      productsDetailInCart,
+      prices: { subTotal, promoAmount, basketTotal }
+    } = this.props
     return (
       <View>
         {productsDetailInCart.map(this.renderProductsDetailList)}
@@ -111,7 +117,7 @@ class ProductDetail extends Component {
             <Text>Sub Total:</Text>
           </View>
           <View style={list.rowContent}>
-            <Text>${prices.subTotal}</Text>
+            <Text>${subTotal}</Text>
           </View>
         </View>
         <View style={list.row}>
@@ -119,7 +125,7 @@ class ProductDetail extends Component {
             <Text>Promo Amount</Text>
           </View>
           <View style={list.rowContent}>
-            <Text>${prices.promoAmount}</Text>
+            <Text>${promoAmount}</Text>
           </View>
         </View>
         <View style={list.row}>
@@ -127,7 +133,7 @@ class ProductDetail extends Component {
             <Text>Basket Total:</Text>
           </View>
           <View style={list.rowContent}>
-            <Text>${prices.basketTotal}</Text>
+            <Text>${basketTotal}</Text>
           </View>
         </View>
         <View style={styles.checkout}>

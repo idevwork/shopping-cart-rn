@@ -5,37 +5,37 @@ import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
 const ProductDetailItem = ({
-  product,
+  product: { sku, name, quantity, price },
   handleAddToCart,
   handleRemoveFromCart,
   handleClearFromCart
 }) => {
   const onAddToCart = () => {
-    handleAddToCart(product.sku)
+    handleAddToCart(sku)
   }
 
   const onRemoveFromCart = () => {
-    handleRemoveFromCart(product.sku)
+    handleRemoveFromCart(sku)
   }
 
   const onClearFromCart = () => {
-    handleClearFromCart(product.sku)
+    handleClearFromCart(sku)
   }
 
   return (
-    <View key={product.sku} style={list.row}>
+    <View key={sku} style={list.row}>
       <View style={list.rowTitle}>
-        <Text>{product.name}</Text>
+        <Text>{name}</Text>
       </View>
       <View style={list.rowContent}>
         <TouchableOpacity style={button.action} onPress={onRemoveFromCart}>
           <Text style={button.actionText}>-</Text>
         </TouchableOpacity>
-        <Text>{product.quantity}</Text>
+        <Text>{quantity}</Text>
         <TouchableOpacity style={button.action} onPress={onAddToCart}>
           <Text style={button.actionText}>+</Text>
         </TouchableOpacity>
-        <Text>${product.price}</Text>
+        <Text>${price}</Text>
         <TouchableOpacity style={button.action} onPress={onClearFromCart}>
           <Text style={button.actionText}>x</Text>
         </TouchableOpacity>
