@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { list } from '../styles/components/List'
 import { button } from '../styles/components/Button'
 
-const ProductDetailItem = ({
+const CartProductsItem = ({
   product: { sku, name, quantity, price },
   handleAddToCart,
   handleRemoveFromCart,
@@ -44,11 +44,11 @@ const ProductDetailItem = ({
   )
 }
 
-ProductDetailItem.propTypes = {
+CartProductsItem.propTypes = {
   product: PropTypes.object,
   handleRemoveFromCart: PropTypes.func,
   handleAddToCart: PropTypes.func,
   handleClearFromCart: PropTypes.func
 }
 
-export default ProductDetailItem
+export default CartProductsItem

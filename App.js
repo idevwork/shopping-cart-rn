@@ -1,57 +1,36 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Provider } from 'react-redux'
 import ProductsList from './app/containers/ProductsList'
-import ProductDetail from './app/containers/ProductDetail'
+import CartProducts from './app/containers/CartProducts'
 import HeaderRight from './app/components/HeaderRight'
 import store from './app/redux/store'
 
-const styles = {
-  screenOptions: {
-    headerTitleAlign: 'center'
-  }
-}
-
 const Stack = createStackNavigator()
 
-class App extends Component {
-  staticOptions = ({ route, navigation: { navigate } }) => {
-    const params = route.params || { quantity: 0 }
+const App = () => {
+  const staticOptions = ({ navigation }) => {
     return {
-      headerRight: () => (
-        <HeaderRight
-          params={params}
-          navigate={navigate}
-          navigateTo="ProductDetail"
-        />
-      )
+      headerTitleAlign: 'center',
+      // eslint-disable-next-line react/display-name
+      headerRight: () => <HeaderRight navigation={navigation} />
     }
   }
 
-  render() {
-    return (
-      <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="ProductsList"
-            screenOptions={styles.screenOptions}
-          >
-            <Stack.Screen
-              name="ProductsList"
-              component={ProductsList}
-              options={this.staticOptions}
-            />
-            <Stack.Screen
-              name="ProductDetail"
-              component={ProductDetail}
-              options={this.staticOptions}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-    )
-  }
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="ProductsList"
+          screenOptions={staticOptions}
+        >
+          <Stack.Screen name="ProductsList" component={ProductsList} />
+          <Stack.Screen name="CartProducts" component={CartProducts} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  )
 }
 
 export default App

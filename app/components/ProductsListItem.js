@@ -21,8 +21,7 @@ const ProductsListItem = ({
       <View style={list.rowContent}>
         <Text>
           ${price}
-          {Object.prototype.hasOwnProperty.call(productsInCart, sku) &&
-            ` X ${productsInCart[sku]}`}
+          {productsInCart && productsInCart[sku] && ` X ${productsInCart[sku]}`}
         </Text>
         <TouchableOpacity style={button.action} onPress={onAddToCart}>
           <Text style={button.actionText}>+</Text>

@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 
 import { fetchProductsRequest, addToCart } from '../redux/actions'
-import { getProductsQuantityInCart } from '../selectors'
 import ProductsListItem from '../components/ProductsListItem'
 
 class ProductsList extends Component {
@@ -14,16 +13,8 @@ class ProductsList extends Component {
   }
 
   componentDidMount() {
-    const { fetchProductsRequest, quantity, navigation } = this.props
+    const { fetchProductsRequest } = this.props
     fetchProductsRequest()
-    navigation.setParams({ quantity })
-  }
-
-  componentDidUpdate(prevProps) {
-    const { quantity, navigation } = this.props
-    if (quantity !== prevProps.quantity) {
-      navigation.setParams({ quantity })
-    }
   }
 
   handleAddToCart = (sku) => {
@@ -51,18 +42,15 @@ class ProductsList extends Component {
 }
 
 ProductsList.propTypes = {
-  navigation: PropTypes.object,
   fetchProductsRequest: PropTypes.func,
   addToCart: PropTypes.func,
   products: PropTypes.array,
-  productsInCart: PropTypes.object,
-  quantity: PropTypes.number
+  productsInCart: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
   products: state.product,
-  productsInCart: state.cart.productsInCart,
-  quantity: getProductsQuantityInCart(state)
+  productsInCart: state.cart.productsInCart
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,7 +6,7 @@ export const getProductsInCart = (state) => state.cart.productsInCart
 export const getProductsQuantityInCart = (state) =>
   Object.values(state.cart.productsInCart).reduce((acc, cur) => acc + cur, 0)
 
-export const getProductsDetailInCart = createSelector(
+export const getCartProducts = createSelector(
   getProductsInCart,
   getProducts,
   (productsInCart, products) => {

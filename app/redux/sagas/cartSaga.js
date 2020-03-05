@@ -2,7 +2,7 @@ import { select, call, put, takeEvery } from 'redux-saga/effects'
 import actionTypes from '../actions'
 import { applyPromoCode, checkout } from '../../service/cart'
 import config from '../../service/config'
-import { getProductsInCart, getBasket } from '../../selectors'
+import { getBasket } from '../../selectors'
 
 function* applyPromoCodeSaga({ promoCode }) {
   try {

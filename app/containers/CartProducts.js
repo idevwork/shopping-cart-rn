@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import ProductDetailItem from '../components/ProductDetailItem'
+import CartProductsItem from '../components/CartProductsItem'
 import {
   addToCart,
   removeFromCart,
@@ -12,33 +12,25 @@ import {
   checkoutRequest,
   cartReset
 } from '../redux/actions'
-import {
-  getProductsDetailInCart,
-  getProductsQuantityInCart,
-  getPrices
-} from '../selectors'
+import { getCartProducts, getPrices } from '../selectors'
 import { list } from '../styles/components/List'
-import styles from '../styles/pages/ProductDetail'
+import styles from '../styles/pages/CartProducts'
 
-class ProductDetail extends Component {
+class CartProducts extends Component {
+  static navigationOptions = {
+    title: 'Products Detail'
+  }
+
   state = {
     promoCode: ''
   }
 
-  componentDidMount() {
-    const { quantity, navigation } = this.props
-    navigation.setParams({ quantity })
-  }
-
   componentDidUpdate(prevProps) {
-    const { quantity, navigation, checkoutStatus, cartReset } = this.props
-    if (quantity !== prevProps.quantity) {
-      navigation.setParams({ quantity })
-    }
+    const { checkoutStatus, cartReset } = this.props
     if (
       checkoutStatus &&
-      Object.keys(checkoutStatus).length !== 0 &&
-      checkoutStatus !== prevProps.checkoutStatus
+      checkoutStatus.msg &&
+      checkoutStatus.msg !== prevProps.checkoutStatus.msg
     ) {
       cartReset()
     }
@@ -77,7 +69,7 @@ class ProductDetail extends Component {
   renderProductsDetailList = (product) => {
     const { sku } = product
     return (
-      <ProductDetailItem
+      <CartProductsItem
         key={sku}
         product={product}
         handleRemoveFromCart={this.handleRemoveFromCart}
@@ -89,12 +81,12 @@ class ProductDetail extends Component {
 
   render() {
     const {
-      productsDetailInCart,
+      cartProducts,
       prices: { subTotal, promoAmount, basketTotal }
     } = this.props
     return (
       <View>
-        {productsDetailInCart.map(this.renderProductsDetailList)}
+        {cartProducts.map(this.renderProductsDetailList)}
         <View style={list.row}>
           <View style={list.rowTitle}>
             <Text>Promo Code</Text>
@@ -149,13 +141,11 @@ class ProductDetail extends Component {
   }
 }
 
-ProductDetail.propTypes = {
-  navigation: PropTypes.object,
-  productsDetailInCart: PropTypes.array,
+CartProducts.propTypes = {
+  cartProducts: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
   clearFromCart: PropTypes.func,
-  quantity: PropTypes.number,
   applyPromoCode: PropTypes.func,
   prices: PropTypes.object,
   checkoutRequest: PropTypes.func,
@@ -164,8 +154,7 @@ ProductDetail.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  productsDetailInCart: getProductsDetailInCart(state),
-  quantity: getProductsQuantityInCart(state),
+  cartProducts: getCartProducts(state),
   prices: getPrices(state),
   checkoutStatus: state.cart.checkout
 })
@@ -184,4 +173,4 @@ const mapDispatchToProps = (dispatch) => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(CartProducts)

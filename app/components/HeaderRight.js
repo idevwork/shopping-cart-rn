@@ -1,6 +1,8 @@
 import React from 'react'
 import { TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { getProductsQuantityInCart } from '../selectors'
 
 const styles = {
   headerRightButton: {
@@ -11,8 +13,8 @@ const styles = {
   }
 }
 
-const HeaderRight = ({ params: { quantity }, navigate, navigateTo }) => {
-  const handlePressEvent = () => navigate(navigateTo)
+const HeaderRight = ({ navigation: { navigate }, quantity }) => {
+  const handlePressEvent = () => navigate('CartProducts')
   return (
     <TouchableOpacity
       style={styles.headerRightButton}
@@ -24,9 +26,12 @@ const HeaderRight = ({ params: { quantity }, navigate, navigateTo }) => {
 }
 
 HeaderRight.propTypes = {
-  params: PropTypes.object,
-  navigate: PropTypes.func,
-  navigateTo: PropTypes.string
+  navigation: PropTypes.object,
+  quantity: PropTypes.number
 }
 
-export default HeaderRight
+const mapStateToProps = (state) => ({
+  quantity: getProductsQuantityInCart(state)
+})
+
+export default connect(mapStateToProps, null)(HeaderRight)
