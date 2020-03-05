@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Provider } from 'react-redux'
 import ProductsList from './app/containers/ProductsList'
-import CartProducts from './app/containers/CartProducts'
+import CheckoutProducts from './app/containers/CheckoutProducts'
 import HeaderRight from './app/components/HeaderRight'
 import store from './app/redux/store'
 
@@ -25,8 +25,16 @@ const App = () => {
           initialRouteName="ProductsList"
           screenOptions={staticOptions}
         >
-          <Stack.Screen name="ProductsList" component={ProductsList} />
-          <Stack.Screen name="CartProducts" component={CartProducts} />
+          <Stack.Screen
+            name="ProductsList"
+            component={ProductsList}
+            options={{ title: 'Products' }}
+          />
+          <Stack.Screen
+            name="CheckoutProducts"
+            component={CheckoutProducts}
+            options={{ title: 'Checkout' }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

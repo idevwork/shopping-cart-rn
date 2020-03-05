@@ -8,10 +8,6 @@ import { fetchProductsRequest, addToCart } from '../redux/actions'
 import ProductsListItem from '../components/ProductsListItem'
 
 class ProductsList extends Component {
-  static navigationOptions = {
-    title: 'Products'
-  }
-
   componentDidMount() {
     const { fetchProductsRequest } = this.props
     fetchProductsRequest()

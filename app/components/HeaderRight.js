@@ -14,7 +14,7 @@ const styles = {
 }
 
 const HeaderRight = ({ navigation: { navigate }, quantity }) => {
-  const handlePressEvent = () => navigate('CartProducts')
+  const handlePressEvent = () => navigate('CheckoutProducts')
   return (
     <TouchableOpacity
       style={styles.headerRightButton}

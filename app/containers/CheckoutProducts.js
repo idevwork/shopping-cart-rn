@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import CartProductsItem from '../components/CartProductsItem'
+import CheckoutProductsItem from '../components/CheckoutProductsItem'
 import {
   addToCart,
   removeFromCart,
@@ -14,13 +14,9 @@ import {
 } from '../redux/actions'
 import { getCartProducts, getPrices } from '../selectors'
 import { list } from '../styles/components/List'
-import styles from '../styles/pages/CartProducts'
+import styles from '../styles/pages/CheckoutProducts'
 
-class CartProducts extends Component {
-  static navigationOptions = {
-    title: 'Products Detail'
-  }
-
+class CheckoutProducts extends Component {
   state = {
     promoCode: ''
   }
@@ -69,7 +65,7 @@ class CartProducts extends Component {
   renderProductsDetailList = (product) => {
     const { sku } = product
     return (
-      <CartProductsItem
+      <CheckoutProductsItem
         key={sku}
         product={product}
         handleRemoveFromCart={this.handleRemoveFromCart}
@@ -141,7 +137,7 @@ class CartProducts extends Component {
   }
 }
 
-CartProducts.propTypes = {
+CheckoutProducts.propTypes = {
   cartProducts: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
@@ -173,4 +169,9 @@ const mapDispatchToProps = (dispatch) => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartProducts)
+const ConnectedCheckoutProducts = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CheckoutProducts)
+
+export default ConnectedCheckoutProducts
