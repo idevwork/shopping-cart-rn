@@ -26,7 +26,7 @@ class ProductsList extends Component {
         key={sku}
         productsInCart={productsInCart}
         product={el}
-        handleAddCart={this.handleAddToCart}
+        addToCart={this.handleAddToCart}
       />
     )
   }

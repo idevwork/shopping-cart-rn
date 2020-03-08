@@ -1,6 +1,6 @@
-import { color } from '../abstracts/variables'
+import { color } from '../common/variables'
 
-export const list = {
+export const listStyles = {
   row: {
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -11,7 +11,7 @@ export const list = {
     paddingVertical: 15
   },
   rowTitle: {
-    marginRight: 50
+    paddingRight: 50
   },
   rowContent: {
     alignItems: 'center',

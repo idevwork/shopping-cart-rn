@@ -1,6 +1,6 @@
-import { color } from '../abstracts/variables'
+import { color } from '../common/variables'
 
-export const button = {
+export const buttonStyles = {
   action: {
     alignItems: 'center',
     backgroundColor: color.dark500,

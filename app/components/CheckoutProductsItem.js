@@ -1,54 +1,75 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-import { list } from '../styles/components/List'
-import { button } from '../styles/components/Button'
+import { listStyles } from '../styles/components/ListStyles'
+import { buttonStyles } from '../styles/components/ButtonStyles'
 
-const CartProductsItem = ({
-  product: { sku, name, quantity, price },
-  handleAddToCart,
-  handleRemoveFromCart,
-  handleClearFromCart
-}) => {
-  const onAddToCart = () => {
-    handleAddToCart(sku)
+class CartProductsItem extends Component {
+  handleAddToCart() {
+    const {
+      addToCart,
+      product: { sku }
+    } = this.props
+    addToCart(sku)
   }
 
-  const onRemoveFromCart = () => {
-    handleRemoveFromCart(sku)
+  handleRemoveFromCart() {
+    const {
+      removeFromCart,
+      product: { sku }
+    } = this.props
+    removeFromCart(sku)
   }
 
-  const onClearFromCart = () => {
-    handleClearFromCart(sku)
+  handleClearFromCart() {
+    const {
+      clearFromCart,
+      product: { sku }
+    } = this.props
+    clearFromCart(sku)
   }
 
-  return (
-    <View key={sku} style={list.row}>
-      <View style={list.rowTitle}>
-        <Text>{name}</Text>
+  render() {
+    const {
+      product: { sku, name, quantity, price }
+    } = this.props
+    return (
+      <View key={sku} style={listStyles.row}>
+        <View style={listStyles.rowTitle}>
+          <Text>{name}</Text>
+        </View>
+        <View style={listStyles.rowContent}>
+          <TouchableOpacity
+            style={buttonStyles.action}
+            onPress={this.handleRemoveFromCart}
+          >
+            <Text style={buttonStyles.actionText}>-</Text>
+          </TouchableOpacity>
+          <Text>{quantity}</Text>
+          <TouchableOpacity
+            style={buttonStyles.action}
+            onPress={this.handleAddToCart}
+          >
+            <Text style={buttonStyles.actionText}>+</Text>
+          </TouchableOpacity>
+          <Text>${price}</Text>
+          <TouchableOpacity
+            style={buttonStyles.action}
+            onPress={this.handleClearFromCart}
+          >
+            <Text style={buttonStyles.actionText}>x</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={list.rowContent}>
-        <TouchableOpacity style={button.action} onPress={onRemoveFromCart}>
-          <Text style={button.actionText}>-</Text>
-        </TouchableOpacity>
-        <Text>{quantity}</Text>
-        <TouchableOpacity style={button.action} onPress={onAddToCart}>
-          <Text style={button.actionText}>+</Text>
-        </TouchableOpacity>
-        <Text>${price}</Text>
-        <TouchableOpacity style={button.action} onPress={onClearFromCart}>
-          <Text style={button.actionText}>x</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
+    )
+  }
 }
 
 CartProductsItem.propTypes = {
   product: PropTypes.object,
-  handleRemoveFromCart: PropTypes.func,
-  handleAddToCart: PropTypes.func,
-  handleClearFromCart: PropTypes.func
+  removeFromCart: PropTypes.func,
+  addToCart: PropTypes.func,
+  clearFromCart: PropTypes.func
 }
 
 export default CartProductsItem

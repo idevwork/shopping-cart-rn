@@ -13,8 +13,45 @@ import {
   cartReset
 } from '../redux/actions'
 import { getCartProducts, getPrices } from '../selectors'
-import { list } from '../styles/components/List'
-import styles from '../styles/pages/CheckoutProducts'
+import { listStyles } from '../styles/components/ListStyles'
+import { color } from '../styles/common/variables'
+
+const styles = {
+  checkout: {
+    alignItems: 'center'
+  },
+  checkoutButton: {
+    backgroundColor: color.transparent,
+    borderColor: color.green500,
+    borderRadius: 3,
+    borderWidth: 2,
+    marginVertical: 10,
+    padding: 10,
+    width: '70%'
+  },
+  checkoutButtonText: {
+    color: color.green500,
+    textAlign: 'center'
+  },
+  promoCode: {},
+  promoCodeButton: {
+    backgroundColor: color.green500,
+    borderRadius: 5,
+    marginRight: 10,
+    padding: 5
+  },
+  promoCodeInput: {
+    borderColor: color.gray500,
+    borderWidth: 1,
+    flex: 1,
+    height: 30,
+    marginHorizontal: 3,
+    paddingVertical: 3
+  },
+  promoCodeText: {
+    color: color.white
+  }
+}
 
 class CheckoutProducts extends Component {
   state = {
@@ -68,9 +105,9 @@ class CheckoutProducts extends Component {
       <CheckoutProductsItem
         key={sku}
         product={product}
-        handleRemoveFromCart={this.handleRemoveFromCart}
-        handleAddToCart={this.handleAddToCart}
-        handleClearFromCart={this.handleClearFromCart}
+        removeFromCart={this.handleRemoveFromCart}
+        addToCart={this.handleAddToCart}
+        clearFromCart={this.handleClearFromCart}
       />
     )
   }
@@ -83,11 +120,11 @@ class CheckoutProducts extends Component {
     return (
       <View>
         {cartProducts.map(this.renderProductsDetailList)}
-        <View style={list.row}>
-          <View style={list.rowTitle}>
+        <View style={listStyles.row}>
+          <View style={listStyles.rowTitle}>
             <Text>Promo Code</Text>
           </View>
-          <View style={[list.rowContent, styles.promoCode]}>
+          <View style={[listStyles.rowContent, styles.promo]}>
             <TextInput
               style={styles.promoCodeInput}
               onChangeText={this.handleTextEvent}
@@ -100,27 +137,27 @@ class CheckoutProducts extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={list.row}>
-          <View style={list.rowTitle}>
+        <View style={listStyles.row}>
+          <View style={listStyles.rowTitle}>
             <Text>Sub Total:</Text>
           </View>
-          <View style={list.rowContent}>
+          <View style={listStyles.rowContent}>
             <Text>${subTotal}</Text>
           </View>
         </View>
-        <View style={list.row}>
-          <View style={list.rowTitle}>
+        <View style={listStyles.row}>
+          <View style={listStyles.rowTitle}>
             <Text>Promo Amount</Text>
           </View>
-          <View style={list.rowContent}>
+          <View style={listStyles.rowContent}>
             <Text>${promoAmount}</Text>
           </View>
         </View>
-        <View style={list.row}>
-          <View style={list.rowTitle}>
+        <View style={listStyles.row}>
+          <View style={listStyles.rowTitle}>
             <Text>Basket Total:</Text>
           </View>
-          <View style={list.rowContent}>
+          <View style={listStyles.rowContent}>
             <Text>${basketTotal}</Text>
           </View>
         </View>

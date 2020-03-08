@@ -1,30 +1,30 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-import { list } from '../styles/components/List'
-import { button } from '../styles/components/Button'
+import { listStyles } from '../styles/components/ListStyles'
+import { buttonStyles } from '../styles/components/ButtonStyles'
 
 const ProductsListItem = ({
   product: { sku, name, price },
   productsInCart,
-  handleAddCart
+  addToCart
 }) => {
-  const onAddToCart = () => {
-    handleAddCart(sku)
+  const handleAddToCart = () => {
+    addToCart(sku)
   }
 
   return (
-    <View key={sku} style={list.row}>
+    <View key={sku} style={listStyles.row}>
       <View>
         <Text>{name}</Text>
       </View>
-      <View style={list.rowContent}>
+      <View style={listStyles.rowContent}>
         <Text>
           ${price}
           {productsInCart && productsInCart[sku] && ` X ${productsInCart[sku]}`}
         </Text>
-        <TouchableOpacity style={button.action} onPress={onAddToCart}>
-          <Text style={button.actionText}>+</Text>
+        <TouchableOpacity style={buttonStyles.action} onPress={handleAddToCart}>
+          <Text style={buttonStyles.actionText}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -34,7 +34,7 @@ const ProductsListItem = ({
 ProductsListItem.propTypes = {
   product: PropTypes.object,
   productsInCart: PropTypes.object,
-  handleAddCart: PropTypes.func
+  addToCart: PropTypes.func
 }
 
 export default ProductsListItem
