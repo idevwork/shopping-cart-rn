@@ -4,8 +4,14 @@ import PropTypes from 'prop-types'
 import { listStyles } from '../styles/components/ListStyles'
 import { buttonStyles } from '../styles/components/ButtonStyles'
 
-class CartProductsItem extends Component {
-  handleAddToCart() {
+const styles = {
+  actionText: {
+    marginLeft: 10
+  }
+}
+
+class CheckoutProductsItem extends Component {
+  handleAddToCart = () => {
     const {
       addToCart,
       product: { sku }
@@ -13,7 +19,7 @@ class CartProductsItem extends Component {
     addToCart(sku)
   }
 
-  handleRemoveFromCart() {
+  handleRemoveFromCart = () => {
     const {
       removeFromCart,
       product: { sku }
@@ -21,7 +27,7 @@ class CartProductsItem extends Component {
     removeFromCart(sku)
   }
 
-  handleClearFromCart() {
+  handleClearFromCart = () => {
     const {
       clearFromCart,
       product: { sku }
@@ -33,6 +39,7 @@ class CartProductsItem extends Component {
     const {
       product: { sku, name, quantity, price }
     } = this.props
+
     return (
       <View key={sku} style={listStyles.row}>
         <View style={listStyles.rowTitle}>
@@ -45,14 +52,14 @@ class CartProductsItem extends Component {
           >
             <Text style={buttonStyles.actionText}>-</Text>
           </TouchableOpacity>
-          <Text>{quantity}</Text>
+          <Text style={styles.actionText}>{quantity}</Text>
           <TouchableOpacity
             style={buttonStyles.action}
             onPress={this.handleAddToCart}
           >
             <Text style={buttonStyles.actionText}>+</Text>
           </TouchableOpacity>
-          <Text>${price}</Text>
+          <Text style={styles.actionText}>${price}</Text>
           <TouchableOpacity
             style={buttonStyles.action}
             onPress={this.handleClearFromCart}
@@ -65,11 +72,11 @@ class CartProductsItem extends Component {
   }
 }
 
-CartProductsItem.propTypes = {
+CheckoutProductsItem.propTypes = {
   product: PropTypes.object,
   removeFromCart: PropTypes.func,
   addToCart: PropTypes.func,
   clearFromCart: PropTypes.func
 }
 
-export default CartProductsItem
+export default CheckoutProductsItem

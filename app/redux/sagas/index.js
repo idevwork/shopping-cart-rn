@@ -3,5 +3,9 @@ import { applyPromoCodeWatcher, checkoutWatcher } from './cartSaga'
 import { fetchProductsWatcher } from './productSaga'
 
 export default function* rootSaga() {
-  yield all([applyPromoCodeWatcher(), checkoutWatcher(), fetchProductsWatcher()])
+  yield all([
+    applyPromoCodeWatcher(),
+    checkoutWatcher(),
+    fetchProductsWatcher()
+  ])
 }

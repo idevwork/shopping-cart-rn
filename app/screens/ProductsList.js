@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { View, FlatList } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { View } from 'react-native'
-
-import { fetchProductsRequest, addToCart } from '../redux/actions'
+import PropTypes from 'prop-types'
 import ProductsListItem from '../components/ProductsListItem'
+import { fetchProductsRequest } from '../redux/reducers/product'
+import { addToCart } from '../redux/reducers/cart'
 
 class ProductsList extends Component {
   componentDidMount() {
@@ -18,14 +18,14 @@ class ProductsList extends Component {
     addToCart(sku)
   }
 
-  renderProductsList = (el) => {
+  renderProductsList = ({ item }) => {
     const { productsInCart } = this.props
-    const { sku } = el
+    const { sku } = item
     return (
       <ProductsListItem
         key={sku}
         productsInCart={productsInCart}
-        product={el}
+        product={item}
         addToCart={this.handleAddToCart}
       />
     )
@@ -33,7 +33,16 @@ class ProductsList extends Component {
 
   render() {
     const { products } = this.props
-    return <View>{products.map(this.renderProductsList)}</View>
+
+    return (
+      <View>
+        <FlatList
+          data={products}
+          renderItem={this.renderProductsList}
+          keyExtractor={(item) => `item-${item.sku}`}
+        />
+      </View>
+    )
   }
 }
 

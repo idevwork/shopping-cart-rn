@@ -1,14 +1,20 @@
-import actionTypes from '../actions'
+import { createAction, handleActions } from 'redux-actions'
 
-const initialState = []
+const defaultState = []
 
-const product = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.FETCH_PRODUCTS_SUCCEED:
-      return action.products
-    default:
-      return state
-  }
+export const actionTypes = {
+  fetchProductsRequest: 'PRODUCT/FETCH_PRODUCTS_REQUEST',
+  fetchProductsSucceed: 'PRODUCT/FETCH_PRODUCTS_SUCCEED',
+  fetchProductsFail: 'PRODUCT/FETCH_PRODUCTS_FAIL'
 }
 
-export default product
+export const fetchProductsRequest = createAction(
+  actionTypes.fetchProductsRequest
+)
+
+export default handleActions(
+  {
+    [actionTypes.fetchProductsSucceed]: (state, action) => action.products
+  },
+  defaultState
+)

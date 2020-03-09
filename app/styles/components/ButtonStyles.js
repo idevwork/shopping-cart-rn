@@ -2,17 +2,15 @@ import { color } from '../common/variables'
 
 export const buttonStyles = {
   action: {
-    alignItems: 'center',
-    backgroundColor: color.dark500,
+    marginLeft: 10,
     borderRadius: 1000,
+    backgroundColor: color.dark500,
     height: 30,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    width: 30
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   actionText: {
     color: color.white
-  },
-  normal: {},
-  normalText: {}
+  }
 }

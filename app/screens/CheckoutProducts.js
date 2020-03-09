@@ -1,52 +1,53 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Text, TextInput, View, TouchableOpacity } from 'react-native'
+import { Text, TextInput, View, TouchableOpacity, FlatList } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import CheckoutProductsItem from '../components/CheckoutProductsItem'
 import {
   addToCart,
   removeFromCart,
   clearFromCart,
-  applyPromoCode,
+  applyPromoCodeRequest,
   checkoutRequest,
   cartReset
-} from '../redux/actions'
+} from '../redux/reducers/cart'
 import { getCartProducts, getPrices } from '../selectors'
-import { listStyles } from '../styles/components/ListStyles'
 import { color } from '../styles/common/variables'
+import { listStyles } from '../styles/components/ListStyles'
 
 const styles = {
   checkout: {
     alignItems: 'center'
   },
   checkoutButton: {
-    backgroundColor: color.transparent,
+    marginVertical: 10,
+    padding: 10,
     borderColor: color.green500,
     borderRadius: 3,
     borderWidth: 2,
-    marginVertical: 10,
-    padding: 10,
+    backgroundColor: color.transparent,
     width: '70%'
   },
   checkoutButtonText: {
     color: color.green500,
     textAlign: 'center'
   },
-  promoCode: {},
+  promoCode: {
+    flex: 1
+  },
   promoCodeButton: {
-    backgroundColor: color.green500,
+    padding: 5,
     borderRadius: 5,
-    marginRight: 10,
-    padding: 5
+    backgroundColor: color.green500
   },
   promoCodeInput: {
+    marginHorizontal: 10,
+    paddingVertical: 3,
     borderColor: color.gray500,
     borderWidth: 1,
     flex: 1,
-    height: 30,
-    marginHorizontal: 3,
-    paddingVertical: 3
+    height: 30
   },
   promoCodeText: {
     color: color.white
@@ -71,7 +72,7 @@ class CheckoutProducts extends Component {
 
   handleCheckoutRequest = () => {
     const { checkoutRequest } = this.props
-    return checkoutRequest()
+    checkoutRequest()
   }
 
   handleAddToCart = (sku) => {
@@ -89,22 +90,22 @@ class CheckoutProducts extends Component {
     clearFromCart(sku)
   }
 
-  handleApplyPromoCode = () => {
-    const { applyPromoCode } = this.props
+  handleApplyPromoCodeRequest = () => {
+    const { applyPromoCodeRequest } = this.props
     const { promoCode } = this.state
-    applyPromoCode(promoCode)
+    applyPromoCodeRequest(promoCode)
   }
 
   handleTextEvent = (text) => {
     this.setState({ promoCode: text })
   }
 
-  renderProductsDetailList = (product) => {
-    const { sku } = product
+  renderProductsDetailList = ({ item }) => {
+    const { sku } = item
     return (
       <CheckoutProductsItem
         key={sku}
-        product={product}
+        product={item}
         removeFromCart={this.handleRemoveFromCart}
         addToCart={this.handleAddToCart}
         clearFromCart={this.handleClearFromCart}
@@ -117,21 +118,26 @@ class CheckoutProducts extends Component {
       cartProducts,
       prices: { subTotal, promoAmount, basketTotal }
     } = this.props
+
     return (
       <View>
-        {cartProducts.map(this.renderProductsDetailList)}
+        <FlatList
+          data={cartProducts}
+          renderItem={this.renderProductsDetailList}
+          keyExtractor={(item) => `item-${item.sku}`}
+        />
         <View style={listStyles.row}>
           <View style={listStyles.rowTitle}>
             <Text>Promo Code</Text>
           </View>
-          <View style={[listStyles.rowContent, styles.promo]}>
+          <View style={[listStyles.rowContent, styles.promoCode]}>
             <TextInput
               style={styles.promoCodeInput}
               onChangeText={this.handleTextEvent}
             />
             <TouchableOpacity
               style={styles.promoCodeButton}
-              onPress={this.handleApplyPromoCode}
+              onPress={this.handleApplyPromoCodeRequest}
             >
               <Text style={styles.promoCodeText}>Apply</Text>
             </TouchableOpacity>
@@ -179,7 +185,7 @@ CheckoutProducts.propTypes = {
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
   clearFromCart: PropTypes.func,
-  applyPromoCode: PropTypes.func,
+  applyPromoCodeRequest: PropTypes.func,
   prices: PropTypes.object,
   checkoutRequest: PropTypes.func,
   cartReset: PropTypes.func,
@@ -198,7 +204,7 @@ const mapDispatchToProps = (dispatch) => ({
       addToCart,
       removeFromCart,
       clearFromCart,
-      applyPromoCode,
+      applyPromoCodeRequest,
       checkoutRequest,
       cartReset
     },
@@ -206,9 +212,4 @@ const mapDispatchToProps = (dispatch) => ({
   )
 })
 
-const ConnectedCheckoutProducts = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CheckoutProducts)
-
-export default ConnectedCheckoutProducts
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutProducts)
