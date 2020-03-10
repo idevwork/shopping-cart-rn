@@ -10,7 +10,7 @@ const styles = {
   }
 }
 
-class CheckoutProductsItem extends Component {
+class CheckoutProducts extends Component {
   handleAddToCart = () => {
     const {
       addToCart,
@@ -72,11 +72,11 @@ class CheckoutProductsItem extends Component {
   }
 }
 
-CheckoutProductsItem.propTypes = {
+CheckoutProducts.propTypes = {
   product: PropTypes.object,
   removeFromCart: PropTypes.func,
   addToCart: PropTypes.func,
   clearFromCart: PropTypes.func
 }
 
-export default CheckoutProductsItem
+export default CheckoutProducts

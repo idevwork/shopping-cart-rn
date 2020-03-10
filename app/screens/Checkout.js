@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Text, TextInput, View, TouchableOpacity, FlatList } from 'react-native'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import CheckoutProductsItem from '../components/CheckoutProductsItem'
+import CheckoutProducts from '../components/CheckoutProducts'
 import {
   addToCart,
   removeFromCart,
@@ -54,18 +53,17 @@ const styles = {
   }
 }
 
-class CheckoutProducts extends Component {
+class Checkout extends Component {
   state = {
     promoCode: ''
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const { checkoutStatus, cartReset } = this.props
-    if (
-      checkoutStatus &&
-      checkoutStatus.msg &&
-      checkoutStatus.msg !== prevProps.checkoutStatus.msg
-    ) {
+    const succeededCheckout = !!(
+      checkoutStatus.msg && Object.keys(checkoutStatus.msg).length !== 0
+    )
+    if (succeededCheckout) {
       cartReset()
     }
   }
@@ -103,7 +101,7 @@ class CheckoutProducts extends Component {
   renderProductsDetailList = ({ item }) => {
     const { sku } = item
     return (
-      <CheckoutProductsItem
+      <CheckoutProducts
         key={sku}
         product={item}
         removeFromCart={this.handleRemoveFromCart}
@@ -180,7 +178,7 @@ class CheckoutProducts extends Component {
   }
 }
 
-CheckoutProducts.propTypes = {
+Checkout.propTypes = {
   cartProducts: PropTypes.array,
   addToCart: PropTypes.func,
   removeFromCart: PropTypes.func,
@@ -198,18 +196,13 @@ const mapStateToProps = (state) => ({
   checkoutStatus: state.cart.checkout
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  ...bindActionCreators(
-    {
-      addToCart,
-      removeFromCart,
-      clearFromCart,
-      applyPromoCodeRequest,
-      checkoutRequest,
-      cartReset
-    },
-    dispatch
-  )
-})
+const mapDispatchToProps = {
+  addToCart,
+  removeFromCart,
+  clearFromCart,
+  applyPromoCodeRequest,
+  checkoutRequest,
+  cartReset
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(CheckoutProducts)
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout)

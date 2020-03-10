@@ -6,10 +6,10 @@ import { getBasket } from '../../selectors'
 
 function* applyPromoCodeSaga(action) {
   try {
-    const res = yield call(applyPromoCode, action.payload)
+    const { data: promoCode } = yield call(applyPromoCode, action.payload)
     yield put({
       type: actionTypes.applyPromoCodeSucceed,
-      response: res.data
+      promoCode
     })
   } catch (error) {
     console.log(`promoCode: ${error}`)
@@ -24,13 +24,13 @@ function* checkoutSaga() {
   try {
     const { cardNumber } = config
     const basket = yield select(getBasket)
-    const res = yield call(checkout, {
+    const { data: res } = yield call(checkout, {
       basket,
       cardNumber
     })
     yield put({
       type: actionTypes.checkoutSucceed,
-      response: res.data.errors ? res.data.errors[0] : res.data
+      checkout: res.errors ? res.errors[0] : res
     })
   } catch (error) {
     console.log(`checkout: ${error}`)

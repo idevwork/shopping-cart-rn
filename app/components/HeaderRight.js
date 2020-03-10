@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -13,16 +13,25 @@ const styles = {
   }
 }
 
-const HeaderRight = ({ navigation: { navigate }, quantity }) => {
-  const handlePressEvent = () => navigate('CheckoutProducts')
-  return (
-    <TouchableOpacity
-      style={styles.headerRightButton}
-      onPress={handlePressEvent}
-    >
-      <Text style={styles.headerRightButtonText}>Carts {quantity}</Text>
-    </TouchableOpacity>
-  )
+class HeaderRight extends Component {
+  handlePressEvent = () => {
+    const {
+      navigation: { navigate }
+    } = this.props
+    navigate('Checkout')
+  }
+
+  render() {
+    const { quantity } = this.props
+    return (
+      <TouchableOpacity
+        style={styles.headerRightButton}
+        onPress={this.handlePressEvent}
+      >
+        <Text style={styles.headerRightButtonText}>Carts {quantity}</Text>
+      </TouchableOpacity>
+    )
+  }
 }
 
 HeaderRight.propTypes = {
@@ -34,4 +43,4 @@ const mapStateToProps = (state) => ({
   quantity: getProductsQuantityInCart(state)
 })
 
-export default connect(mapStateToProps, null)(HeaderRight)
+export default connect(mapStateToProps)(HeaderRight)

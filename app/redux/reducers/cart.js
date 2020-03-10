@@ -65,11 +65,11 @@ export default handleActions(
     },
     [actionTypes.applyPromoCodeSucceed]: (state, action) => ({
       ...state,
-      promoCode: action.response
+      promoCode: action.promoCode
     }),
     [actionTypes.checkoutSucceed]: (state, action) => ({
       ...state,
-      checkout: action.response
+      checkout: action.checkout
     }),
     [actionTypes.cartReset]: (state) => ({
       ...state,

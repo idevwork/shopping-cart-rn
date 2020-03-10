@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, FlatList } from 'react-native'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ProductsListItem from '../components/ProductsListItem'
@@ -58,14 +57,9 @@ const mapStateToProps = (state) => ({
   productsInCart: state.cart.productsInCart
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  ...bindActionCreators(
-    {
-      fetchProductsRequest,
-      addToCart
-    },
-    dispatch
-  )
-})
+const mapDispatchToProps = {
+  fetchProductsRequest,
+  addToCart
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsList)
