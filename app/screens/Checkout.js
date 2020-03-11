@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, TextInput, View, TouchableOpacity, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import CheckoutProducts from '../components/CheckoutProducts'
+import CheckoutProduct from '../components/CheckoutProduct'
 import {
   addToCart,
   removeFromCart,
@@ -101,7 +101,7 @@ class Checkout extends Component {
   renderProductsDetailList = ({ item }) => {
     const { sku } = item
     return (
-      <CheckoutProducts
+      <CheckoutProduct
         key={sku}
         product={item}
         removeFromCart={this.handleRemoveFromCart}

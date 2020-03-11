@@ -6,10 +6,10 @@ import { getBasket } from '../../selectors'
 
 function* applyPromoCodeSaga(action) {
   try {
-    const { data: promoCode } = yield call(applyPromoCode, action.payload)
+    const { data: payload } = yield call(applyPromoCode, action.payload)
     yield put({
       type: actionTypes.applyPromoCodeSucceed,
-      promoCode
+      payload
     })
   } catch (error) {
     console.log(`promoCode: ${error}`)
@@ -30,7 +30,7 @@ function* checkoutSaga() {
     })
     yield put({
       type: actionTypes.checkoutSucceed,
-      checkout: res.errors ? res.errors[0] : res
+      payload: res.errors ? res.errors[0] : res
     })
   } catch (error) {
     console.log(`checkout: ${error}`)
