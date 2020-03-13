@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-import { listStyles } from '../styles/components/ListStyles'
-import { buttonStyles } from '../styles/components/ButtonStyles'
+import { commonStyles } from '../styles/common/commonStyles'
 
 const styles = {
   actionText: {
@@ -12,59 +11,51 @@ const styles = {
 
 class CheckoutProduct extends Component {
   handleAddToCart = () => {
-    const {
-      addToCart,
-      product: { sku }
-    } = this.props
+    const { addToCart, product } = this.props
+    const { sku } = product
     addToCart(sku)
   }
 
   handleRemoveFromCart = () => {
-    const {
-      removeFromCart,
-      product: { sku }
-    } = this.props
+    const { removeFromCart, product } = this.props
+    const { sku } = product
     removeFromCart(sku)
   }
 
   handleClearFromCart = () => {
-    const {
-      clearFromCart,
-      product: { sku }
-    } = this.props
+    const { clearFromCart, product } = this.props
+    const { sku } = product
     clearFromCart(sku)
   }
 
   render() {
-    const {
-      product: { sku, name, quantity, price }
-    } = this.props
-
+    const { product } = this.props
+    const { sku, name, quantity, price } = product
     return (
-      <View key={sku} style={listStyles.row}>
-        <View style={listStyles.rowTitle}>
+      <View key={sku} style={commonStyles.list.row}>
+        <View style={commonStyles.list.rowTitle}>
           <Text>{name}</Text>
         </View>
-        <View style={listStyles.rowContent}>
+        <View style={commonStyles.list.rowContent}>
           <TouchableOpacity
-            style={buttonStyles.action}
+            style={commonStyles.button.action}
             onPress={this.handleRemoveFromCart}
           >
-            <Text style={buttonStyles.actionText}>-</Text>
+            <Text style={commonStyles.button.actionText}>-</Text>
           </TouchableOpacity>
           <Text style={styles.actionText}>{quantity}</Text>
           <TouchableOpacity
-            style={buttonStyles.action}
+            style={commonStyles.button.action}
             onPress={this.handleAddToCart}
           >
-            <Text style={buttonStyles.actionText}>+</Text>
+            <Text style={commonStyles.button.actionText}>+</Text>
           </TouchableOpacity>
           <Text style={styles.actionText}>${price}</Text>
           <TouchableOpacity
-            style={buttonStyles.action}
+            style={commonStyles.button.action}
             onPress={this.handleClearFromCart}
           >
-            <Text style={buttonStyles.actionText}>x</Text>
+            <Text style={commonStyles.button.actionText}>x</Text>
           </TouchableOpacity>
         </View>
       </View>

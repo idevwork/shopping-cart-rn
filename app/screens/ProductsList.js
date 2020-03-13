@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
-import { View, FlatList } from 'react-native'
+import { Text, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ProductsListItem from '../components/ProductsListItem'
 import { fetchProductsRequest } from '../redux/reducers/product'
 import { addToCart } from '../redux/reducers/cart'
+import has from 'lodash/has'
 
 class ProductsList extends Component {
   componentDidMount() {
-    const { fetchProductsRequest } = this.props
-    fetchProductsRequest()
+    this.props.fetchProductsRequest()
   }
 
   handleAddToCart = (sku) => {
-    const { addToCart } = this.props
-    addToCart(sku)
+    this.props.addToCart(sku)
   }
 
   renderProductsList = ({ item }) => {
@@ -23,22 +22,24 @@ class ProductsList extends Component {
     return (
       <ProductsListItem
         key={sku}
+        products={item}
         productsInCart={productsInCart}
-        product={item}
         addToCart={this.handleAddToCart}
       />
     )
   }
 
-  render() {
-    const { products } = this.props
+  renderKeyExtractor = (item) => `item-${item.sku}`
 
+  render() {
+    const { products, productsInCart } = this.props
     return (
       <View>
         <FlatList
           data={products}
+          extraData={productsInCart}
           renderItem={this.renderProductsList}
-          keyExtractor={(item) => `item-${item.sku}`}
+          keyExtractor={this.renderKeyExtractor}
         />
       </View>
     )

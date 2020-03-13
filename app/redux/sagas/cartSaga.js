@@ -24,13 +24,13 @@ function* checkoutSaga() {
   try {
     const { cardNumber } = config
     const basket = yield select(getBasket)
-    const { data: res } = yield call(checkout, {
+    const { data } = yield call(checkout, {
       basket,
       cardNumber
     })
     yield put({
       type: actionTypes.checkoutSucceed,
-      payload: res.errors ? res.errors[0] : res
+      payload: data.errors ? data.errors[0] : data
     })
   } catch (error) {
     console.log(`checkout: ${error}`)

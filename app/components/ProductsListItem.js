@@ -1,41 +1,34 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-import { listStyles } from '../styles/components/ListStyles'
-import { buttonStyles } from '../styles/components/ButtonStyles'
+import { commonStyles } from '../styles/common/commonStyles'
+import has from 'lodash/has'
 
 class ProductsListItem extends Component {
   handleAddToCart = () => {
-    const {
-      product: { sku },
-      addToCart
-    } = this.props
+    const { products, addToCart } = this.props
+    const { sku } = products
     addToCart(sku)
   }
 
   render() {
-    const {
-      product: { sku, name, price },
-      productsInCart
-    } = this.props
-
+    const { products, productsInCart } = this.props
+    const { sku, name, price } = products
     return (
-      <View key={sku} style={listStyles.row}>
+      <View key={sku} style={commonStyles.list.row}>
         <View>
           <Text>{name}</Text>
         </View>
-        <View style={listStyles.rowContent}>
+        <View style={commonStyles.list.rowContent}>
           <Text>
             ${price}
-            {productsInCart &&
-              productsInCart[sku] &&
-              ` X ${productsInCart[sku]}`}
+            {has(productsInCart, sku) && ` X ${productsInCart[sku]}`}
           </Text>
           <TouchableOpacity
-            style={buttonStyles.action}
+            style={commonStyles.button.action}
             onPress={this.handleAddToCart}
           >
-            <Text style={buttonStyles.actionText}>+</Text>
+            <Text style={commonStyles.button.actionText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -44,7 +37,7 @@ class ProductsListItem extends Component {
 }
 
 ProductsListItem.propTypes = {
-  product: PropTypes.object,
+  products: PropTypes.object,
   productsInCart: PropTypes.object,
   addToCart: PropTypes.func
 }

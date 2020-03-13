@@ -1,7 +1,9 @@
 import { createSelector } from 'reselect'
 
 export const getProducts = (state) => state.product
-export const getProductsInCart = (state) => state.cart.productsInCart
+export const getProductsInCart = (state) => {
+  return state.cart.productsInCart
+}
 
 export const getProductsQuantityInCart = (state) =>
   Object.values(state.cart.productsInCart).reduce((acc, cur) => acc + cur, 0)

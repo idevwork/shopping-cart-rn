@@ -5,19 +5,18 @@ import { connect } from 'react-redux'
 import { getProductsQuantityInCart } from '../selectors'
 
 const styles = {
-  headerRightButton: {
+  rightNavButton: {
     marginRight: 20
   },
-  headerRightButtonText: {
+  rightNavButtonText: {
     color: 'green'
   }
 }
 
-class HeaderRight extends Component {
+class RightNavButton extends Component {
   handlePressEvent = () => {
-    const {
-      navigation: { navigate }
-    } = this.props
+    const { navigation } = this.props
+    const { navigate } = navigation
     navigate('Checkout')
   }
 
@@ -25,16 +24,16 @@ class HeaderRight extends Component {
     const { quantity } = this.props
     return (
       <TouchableOpacity
-        style={styles.headerRightButton}
+        style={styles.rightNavButton}
         onPress={this.handlePressEvent}
       >
-        <Text style={styles.headerRightButtonText}>Carts {quantity}</Text>
+        <Text style={styles.rightNavButtonText}>Carts {quantity}</Text>
       </TouchableOpacity>
     )
   }
 }
 
-HeaderRight.propTypes = {
+RightNavButton.propTypes = {
   navigation: PropTypes.object,
   quantity: PropTypes.number
 }
@@ -43,4 +42,4 @@ const mapStateToProps = (state) => ({
   quantity: getProductsQuantityInCart(state)
 })
 
-export default connect(mapStateToProps)(HeaderRight)
+export default connect(mapStateToProps)(RightNavButton)

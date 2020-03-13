@@ -35,15 +35,12 @@ export const cartReset = createAction(actionTypes.cartReset)
 export default handleActions(
   {
     [actionTypes.addToCart]: (state, action) => {
-      const productsInCart = { ...state.productsInCart }
       const id = action.payload
-      // eslint-disable-next-line no-prototype-builtins
-      if (productsInCart.hasOwnProperty(id)) {
-        productsInCart[id] += 1
-      } else {
-        productsInCart[id] = 1
+      const quantity = state.productsInCart[id] || 0
+      return {
+        ...state,
+        productsInCart: { ...state.productsInCart, [id]: quantity + 1 }
       }
-      return { ...state, productsInCart }
     },
     [actionTypes.removeFromCart]: (state, action) => {
       const productsInCart = { ...state.productsInCart }
@@ -57,8 +54,7 @@ export default handleActions(
     [actionTypes.clearFromCart]: (state, action) => {
       const productsInCart = { ...state.productsInCart }
       const id = action.payload
-      // eslint-disable-next-line no-prototype-builtins
-      if (productsInCart.hasOwnProperty(id)) {
+      if (productsInCart[id]) {
         delete productsInCart[id]
       }
       return { ...state, productsInCart }

@@ -4,8 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Provider } from 'react-redux'
 import ProductsList from './app/screens/ProductsList'
 import Checkout from './app/screens/Checkout'
-import HeaderRight from './app/components/HeaderRight'
+import RightNavButton from './app/components/RightNavButton'
 import store from './app/redux/store'
+import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
 
 const Stack = createStackNavigator()
 
@@ -13,7 +14,7 @@ const staticOptions = ({ navigation }) => {
   return {
     headerTitleAlign: 'center',
     // eslint-disable-next-line react/display-name
-    headerRight: () => <HeaderRight navigation={navigation} />
+    headerRight: () => <RightNavButton navigation={navigation} />
   }
 }
 

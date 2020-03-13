@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Text, TextInput, View, TouchableOpacity, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import isEmpty from 'lodash/isEmpty'
+import has from 'lodash/has'
 import CheckoutProduct from '../components/CheckoutProduct'
 import {
   addToCart,
@@ -12,8 +14,8 @@ import {
   cartReset
 } from '../redux/reducers/cart'
 import { getCartProducts, getPrices } from '../selectors'
-import { color } from '../styles/common/variables'
-import { listStyles } from '../styles/components/ListStyles'
+import { COLORS } from '../styles/colors'
+import { commonStyles } from '../styles/common/commonStyles'
 
 const styles = {
   checkout: {
@@ -22,14 +24,14 @@ const styles = {
   checkoutButton: {
     marginVertical: 10,
     padding: 10,
-    borderColor: color.green500,
+    borderColor: COLORS.green500,
     borderRadius: 3,
     borderWidth: 2,
-    backgroundColor: color.transparent,
+    backgroundColor: COLORS.transparent,
     width: '70%'
   },
   checkoutButtonText: {
-    color: color.green500,
+    color: COLORS.green500,
     textAlign: 'center'
   },
   promoCode: {
@@ -38,18 +40,18 @@ const styles = {
   promoCodeButton: {
     padding: 5,
     borderRadius: 5,
-    backgroundColor: color.green500
+    backgroundColor: COLORS.green500
   },
   promoCodeInput: {
     marginHorizontal: 10,
     paddingVertical: 3,
-    borderColor: color.gray500,
+    borderColor: COLORS.gray500,
     borderWidth: 1,
     flex: 1,
     height: 30
   },
   promoCodeText: {
-    color: color.white
+    color: COLORS.white
   }
 }
 
@@ -60,32 +62,25 @@ class Checkout extends Component {
 
   componentDidUpdate() {
     const { checkoutStatus, cartReset } = this.props
-    const succeededCheckout = !!(
-      checkoutStatus.msg && Object.keys(checkoutStatus.msg).length !== 0
-    )
-    if (succeededCheckout) {
+    if (has(checkoutStatus, 'msg') && !isEmpty(checkoutStatus.msg)) {
       cartReset()
     }
   }
 
   handleCheckoutRequest = () => {
-    const { checkoutRequest } = this.props
-    checkoutRequest()
+    this.props.checkoutRequest()
   }
 
   handleAddToCart = (sku) => {
-    const { addToCart } = this.props
-    addToCart(sku)
+    this.props.addToCart(sku)
   }
 
   handleRemoveFromCart = (sku) => {
-    const { removeFromCart } = this.props
-    removeFromCart(sku)
+    this.props.removeFromCart(sku)
   }
 
   handleClearFromCart = (sku) => {
-    const { clearFromCart } = this.props
-    clearFromCart(sku)
+    this.props.clearFromCart(sku)
   }
 
   handleApplyPromoCodeRequest = () => {
@@ -111,24 +106,23 @@ class Checkout extends Component {
     )
   }
 
-  render() {
-    const {
-      cartProducts,
-      prices: { subTotal, promoAmount, basketTotal }
-    } = this.props
+  renderKeyExtractor = (item) => `item-${item.sku}`
 
+  render() {
+    const { cartProducts, prices } = this.props
+    const { subTotal, promoAmount, basketTotal } = prices
     return (
       <View>
         <FlatList
           data={cartProducts}
           renderItem={this.renderProductsDetailList}
-          keyExtractor={(item) => `item-${item.sku}`}
+          keyExtractor={this.renderKeyExtractor}
         />
-        <View style={listStyles.row}>
-          <View style={listStyles.rowTitle}>
+        <View style={commonStyles.list.row}>
+          <View style={commonStyles.list.rowTitle}>
             <Text>Promo Code</Text>
           </View>
-          <View style={[listStyles.rowContent, styles.promoCode]}>
+          <View style={[commonStyles.list.rowContent, styles.promoCode]}>
             <TextInput
               style={styles.promoCodeInput}
               onChangeText={this.handleTextEvent}
@@ -141,27 +135,27 @@ class Checkout extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={listStyles.row}>
-          <View style={listStyles.rowTitle}>
+        <View style={commonStyles.list.row}>
+          <View style={commonStyles.list.rowTitle}>
             <Text>Sub Total:</Text>
           </View>
-          <View style={listStyles.rowContent}>
+          <View style={commonStyles.list.rowContent}>
             <Text>${subTotal}</Text>
           </View>
         </View>
-        <View style={listStyles.row}>
-          <View style={listStyles.rowTitle}>
+        <View style={commonStyles.list.row}>
+          <View style={commonStyles.list.rowTitle}>
             <Text>Promo Amount</Text>
           </View>
-          <View style={listStyles.rowContent}>
+          <View style={commonStyles.list.rowContent}>
             <Text>${promoAmount}</Text>
           </View>
         </View>
-        <View style={listStyles.row}>
-          <View style={listStyles.rowTitle}>
+        <View style={commonStyles.list.row}>
+          <View style={commonStyles.list.rowTitle}>
             <Text>Basket Total:</Text>
           </View>
-          <View style={listStyles.rowContent}>
+          <View style={commonStyles.list.rowContent}>
             <Text>${basketTotal}</Text>
           </View>
         </View>
