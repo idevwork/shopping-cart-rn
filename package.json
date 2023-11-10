@@ -14,7 +14,7 @@
     "@react-native-community/masked-view": "^0.1.6",
     "@react-navigation/native": "5.0.4",
     "@react-navigation/stack": "5.0.4",
-    "axios": "^0.19.2",
+    "axios": "^1.6.0",
     "lodash": "^4.17.15",
     "lodash.memoize": "^4.1.2",
     "react": "16.9.0",
